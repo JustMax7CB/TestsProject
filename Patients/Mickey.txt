@@ -1,0 +1,14 @@
+Patient Name: Mickey
+Patient Age: 2 years old
+Smoking : Yes
+White Blood Cells : 4000 units
+Neutrophil: 0%
+Lymphocytes : 0%
+Red Blood Cells : 2.1 units
+Hematocrit : 0%
+Urea : 10 mg
+Hemoglobin : 10.0 mg
+CHNO : 0.0 units
+Iron : 50 units
+High Density Lipoprotein : 20 mg
+Alkline Phosphatase : 50 units
