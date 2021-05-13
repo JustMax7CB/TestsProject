@@ -5,16 +5,13 @@ from tkinter.messagebox import askquestion
 import Main
 
 
-
-
-
 def DiagnosisWindow():
     DiagnoseWindow = Tk()
     DiagnoseWindow.title("Diagnosis window")
-    DiagnoseWindow.geometry("1200x750")
+    DiagnoseWindow.geometry("1280x768")
     DiagnoseWindow.resizable(width=False, height=False)
 
-    DiagnoseWindow.grid_rowconfigure(14)
+    DiagnoseWindow.grid_rowconfigure(15)
     DiagnoseWindow.grid_columnconfigure(8)
 
     def Smoking():
@@ -42,7 +39,10 @@ def DiagnosisWindow():
     DiagnoseWindow.config(menu=MenuBar)
 
     ############# Variables ####################
+    FilePath = r'C:\Users\Sman9\Desktop\TestsProject'
     PatientName = StringVar()
+    PatientAge = IntVar()
+    PatientGender = StringVar()
     WBC = IntVar()
     Neut = IntVar()
     Lymph = IntVar()
@@ -57,6 +57,7 @@ def DiagnosisWindow():
     Smoker = BooleanVar()
 
     Labelsfont = ("Lato", 13)
+
     ############################################
 
     def GenerateTextFile(name):
@@ -65,7 +66,7 @@ def DiagnosisWindow():
         else:
             Smoking_ = "No"
         PatientName = name
-        DiagnosisFile = open(PatientName + ".txt", "w+")
+        DiagnosisFile = open(FilePath, "Patients", PatientName + ".txt", 'w+')
         DiagnosisFile.write("Patient Name: " + PatientName + "\n")
         DiagnosisFile.write("Smoking : " + Smoking_ + "\n")
         DiagnosisFile.write("White Blood Cells : " + str(WBC.get()) + "\n")
@@ -81,85 +82,101 @@ def DiagnosisWindow():
         DiagnosisFile.write("Alkline Phosphatase : " + str(AlkalinePhosphatase.get()) + "\n")
         DiagnosisFile.close()
 
-
     ############## Buttons #####################
 
     ConfirmSelection = Button(DiagnoseWindow, text="Confirm", width=20, height=1, background="sienna2",
-                              font=Labelsfont, relief=GROOVE, command = lambda : GenerateTextFile(PatientName.get())).grid(row=11, column=5)
+                              font=Labelsfont, relief=GROOVE, command=lambda: GenerateTextFile(PatientName.get())).grid(
+        row=11, column=5)
 
     #############################################
-    Patient_Name_Label = ttk.Label(DiagnoseWindow, width=30, text="Patient Name", font=Labelsfont).grid(row=1,
-                                                                                                        column=1,
-                                                                                                        sticky=W)
-    Patient_Name_TextBox = ttk.Entry(DiagnoseWindow, width=30, textvariable=PatientName).grid(row=1, column=2, sticky=W)
 
-    WBC_Label = ttk.Label(DiagnoseWindow, width=30, text="White Blood Cells", font=Labelsfont).grid(row=2,
+    Patient_Name_Label = ttk.Label(DiagnoseWindow, width=30, text="Name:", font=Labelsfont).grid(row=1,
+                                                                                                 column=1,
+                                                                                                 sticky=W)
+    Patient_Name_TextBox = ttk.Entry(DiagnoseWindow, width=30, textvariable=PatientName)
+    Patient_Name_TextBox.grid(row=1, column=2, sticky=W)
+    Patient_Name_TextBox.focus()
+
+    Patient_Age_Label = ttk.Label(DiagnoseWindow, width=20, text="Age:", font=Labelsfont).grid(row=2, column=1,
+                                                                                               sticky=W)
+    Patient_Age_Combobox = ttk.Combobox(DiagnoseWindow, width=20, values=tuple(range(121)),
+                                        textvariable=PatientAge).grid(row=2, column=2, sticky=W)
+
+    Patient_Gender_Label = ttk.Label(DiagnoseWindow, width=20, text="Gender:", font=Labelsfont).grid(row=3, column=1,
+                                                                                                     sticky=W)
+    Patient_Gender_Combobox = ttk.Combobox(DiagnoseWindow, width=10, values=("Male", "Female"),
+                                           textvariable=PatientGender).grid(row=3, column=2, sticky=W)
+    WBC_Label = ttk.Label(DiagnoseWindow, width=30, text="White Blood Cells", font=Labelsfont).grid(row=4,
                                                                                                     column=1,
                                                                                                     sticky=W)
     WBC_Scale = Scale(DiagnoseWindow, from_=4000, to=12000, length=600, tickinterval=550,
-                      orient=HORIZONTAL, variable=WBC, background="floralwhite").grid(row=2, column=2, sticky=W)
+                      orient=HORIZONTAL, variable=WBC, background="floralwhite").grid(row=4, column=2, sticky=W)
 
-    Neut_Label = ttk.Label(DiagnoseWindow, width=30, text="Neutrophil (in %)", font=Labelsfont).grid(row=3,
+    Neut_Label = ttk.Label(DiagnoseWindow, width=30, text="Neutrophil (in %)", font=Labelsfont).grid(row=5,
                                                                                                      column=1,
                                                                                                      sticky=W)
     Neut_Scale = Scale(DiagnoseWindow, from_=0, to=100, length=400, tickinterval=5, orient=HORIZONTAL, variable=Neut,
-                       background="bisque").grid(row=3, column=2, sticky=W)
+                       background="bisque").grid(row=5, column=2, sticky=W)
 
-    Lymph_Label = ttk.Label(DiagnoseWindow, width=30, text="Lymphocytes (in %)", font=Labelsfont).grid(row=4, column=1,
+    Lymph_Label = ttk.Label(DiagnoseWindow, width=30, text="Lymphocytes (in %)", font=Labelsfont).grid(row=6, column=1,
                                                                                                        sticky=W)
     Lymph_Scale = Scale(DiagnoseWindow, from_=0, to=100, length=400, tickinterval=5, orient=HORIZONTAL, variable=Lymph,
-                        background="navajo white").grid(row=4, column=2, sticky=W)
+                        background="navajo white").grid(row=6, column=2, sticky=W)
 
-    RBC_Label = ttk.Label(DiagnoseWindow, width=30, text="Red Blood Cells", font=Labelsfont).grid(row=5,
+    RBC_Label = ttk.Label(DiagnoseWindow, width=30, text="Red Blood Cells", font=Labelsfont).grid(row=7,
                                                                                                   column=1,
                                                                                                   sticky=W)
     RBC_Scale = Scale(DiagnoseWindow, from_=2.0, to=8.5, digits=2, length=400, resolution=0.3, tickinterval=0.5,
                       orient=HORIZONTAL, variable=RBC,
-                      background="salmon").grid(row=5, column=2, sticky=W)
+                      background="salmon").grid(row=7, column=2, sticky=W)
 
-    HCT_Label = ttk.Label(DiagnoseWindow, width=30, text="HCT (in %)", font=Labelsfont).grid(row=6,
+    HCT_Label = ttk.Label(DiagnoseWindow, width=30, text="HCT (in %)", font=Labelsfont).grid(row=8,
                                                                                              column=1,
                                                                                              sticky=W)
     HCT_Scale = Scale(DiagnoseWindow, from_=0, to=100, length=400, tickinterval=5, orient=HORIZONTAL, variable=HCT,
-                      background="light coral").grid(row=6, column=2, sticky=W)
+                      background="light coral").grid(row=8, column=2, sticky=W)
 
-    Urea_Label = ttk.Label(DiagnoseWindow, width=30, text="Urea (mg)", font=Labelsfont).grid(row=7,
+    Urea_Label = ttk.Label(DiagnoseWindow, width=30, text="Urea (mg)", font=Labelsfont).grid(row=9,
                                                                                              column=1,
                                                                                              sticky=W)
     Urea_Scale = Scale(DiagnoseWindow, from_=10, to=50, length=300, tickinterval=5, orient=HORIZONTAL, variable=Urea,
-                       background="indian red").grid(row=7, column=2, sticky=W)
+                       background="indian red").grid(row=9, column=2, sticky=W)
 
-    Hb_Label = ttk.Label(DiagnoseWindow, width=30, text="Hemoglobin (mg)", font=Labelsfont).grid(row=8,
+    Hb_Label = ttk.Label(DiagnoseWindow, width=30, text="Hemoglobin (mg)", font=Labelsfont).grid(row=10,
                                                                                                  column=1,
                                                                                                  sticky=W)
     Hb_Scale = Scale(DiagnoseWindow, from_=10.0, to=18.0, length=450, digits=3, resolution=0.5, tickinterval=0.5,
                      orient=HORIZONTAL, variable=Hb,
-                     background="rosy brown").grid(row=8, column=2, sticky=W)
+                     background="rosy brown").grid(row=10, column=2, sticky=W)
 
-    CHNO_Label = ttk.Label(DiagnoseWindow, width=30, text="Creatinine", font=Labelsfont).grid(row=9,
+    CHNO_Label = ttk.Label(DiagnoseWindow, width=30, text="Creatinine", font=Labelsfont).grid(row=11,
                                                                                               column=1,
                                                                                               sticky=W)
     CHNO_Scale = Scale(DiagnoseWindow, from_=0, to=1.5, length=450, digits=2, resolution=0.1, tickinterval=0.1,
                        orient=HORIZONTAL, variable=CHNO,
-                       background="sandy brown").grid(row=9, column=2, sticky=W)
+                       background="sandy brown").grid(row=11, column=2, sticky=W)
 
-    Iron_Label = ttk.Label(DiagnoseWindow, width=30, text="Iron", font=Labelsfont).grid(row=10,
+    Iron_Label = ttk.Label(DiagnoseWindow, width=30, text="Iron", font=Labelsfont).grid(row=12,
                                                                                         column=1,
                                                                                         sticky=W)
     Iron_Scale = Scale(DiagnoseWindow, from_=50, to=200, length=450, tickinterval=20, orient=HORIZONTAL, variable=Iron,
-                       background="seashell4").grid(row=10, column=2, sticky=W)
+                       background="seashell4").grid(row=12, column=2, sticky=W)
 
-    HDL_Label = ttk.Label(DiagnoseWindow, width=30, text="High Density Lipoprotein (mg)", font=Labelsfont).grid(row=11,
+    HDL_Label = ttk.Label(DiagnoseWindow, width=30, text="High Density Lipoprotein (mg)", font=Labelsfont).grid(row=13,
                                                                                                                 column=1,
                                                                                                                 sticky=W)
     HDL_Scale = Scale(DiagnoseWindow, from_=20, to=100, length=450, tickinterval=12, orient=HORIZONTAL, variable=HDL,
-                      background="goldenrod").grid(row=11, column=2, sticky=W)
+                      background="goldenrod").grid(row=13, column=2, sticky=W)
 
     AlkalinePhosphatase_Label = ttk.Label(DiagnoseWindow, width=30, text="Alkaline Phosphatase (units)",
-                                          font=Labelsfont).grid(row=12,
+                                          font=Labelsfont).grid(row=14,
                                                                 column=1,
                                                                 sticky=W)
     AlkalinePhosphatase_Scale = Scale(DiagnoseWindow, from_=50, to=150, length=450, tickinterval=15, orient=HORIZONTAL,
                                       variable=AlkalinePhosphatase,
-                                      background="dark salmon").grid(row=12, column=2, sticky=W)
+                                      background="dark salmon").grid(row=14, column=2, sticky=W)
+
+    def Diagnose():
+        DiagnosisFile = open(FilePath, "Patients", PatientName.get() + ".txt", 'a')
+
     DiagnoseWindow.mainloop()

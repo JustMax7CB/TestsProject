@@ -20,6 +20,7 @@ def main():
     UsernameLabel = Label(MainWindow, text="Username", font=("Lato", 11)).grid(row=1, column=1, padx=5, pady=5)
     UsernameTextBox = ttk.Entry(MainWindow, width=30, textvariable=UsernameEntry)
     UsernameTextBox.grid(row=1, column=2, padx=5, pady=5)
+    UsernameTextBox.focus()
 
     PasswordLabel = Label(MainWindow, text="Password", font=("Lato", 11)).grid(row=2, column=1, padx=5, pady=5)
     PasswordTextBox = ttk.Entry(MainWindow, width=30, textvariable=PasswordEntry, show="*")
