@@ -15,7 +15,7 @@ def DiagnosisWindow():
     DiagnoseWindow.grid_columnconfigure(8)
 
     def Smoking():
-        Smoker = askquestion(title='Smoking?', message='Do you smoke?')
+        Smoker = askquestion(title='Smoking?', message='Does the Patient Smoking?')
 
     def Disconnect(window):
         window.destroy()
@@ -178,5 +178,20 @@ def DiagnosisWindow():
 
     def Diagnose():
         DiagnosisFile = open(FilePath, "Patients", PatientName.get() + ".txt", 'a')
+        DiagnosisFile.write("\nDiagnosis:\n")
+        if 0 <= PatientAge.get() <= 3:
+            if WBC.get() > 17500:
+                DiagnosisFile.write("High WBC(White blood cells):\n"
+                                    "Usually indicated that there is an infection if there is a fever.\n"
+                                    "In other rare cases, very high WBC count may indicate about blood disease or cancer.\n")
+            elif WBC.get() < 6000:
+                DiagnosisFile.write("Low WBC(White blood cells):\n"
+                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
+                                    "- cancer.\n")
 
+            if Neut.get() > 54:
+                DiagnosisFile.write("High Neut(Neutrophil):\n"
+                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
+                                    "- cancer.\n")
+        DiagnosisFile.close()
     DiagnoseWindow.mainloop()
