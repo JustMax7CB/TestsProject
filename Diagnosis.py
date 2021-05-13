@@ -39,7 +39,7 @@ def DiagnosisWindow():
     DiagnoseWindow.config(menu=MenuBar)
 
     ############# Variables ####################
-    FilePath = r'C:\Users\Sman9\Desktop\TestsProject'
+    FilePath = r'C:\Users\****\Desktop\TestsProject'
     PatientName = StringVar()
     PatientAge = IntVar()
     PatientGender = StringVar()
