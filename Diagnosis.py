@@ -40,7 +40,8 @@ def DiagnosisWindow():
     DiagnoseWindow.config(menu=MenuBar)
 
     ############# Variables ####################
-    FilePath = r"C:\Users\Sman9\Desktop\TestsProject\Patients"
+    FilePath = os.getcwd() + "\Patients"
+    print(FilePath)
     PatientName = StringVar()
     PatientAge = IntVar()
     PatientGender = StringVar()
@@ -56,16 +57,16 @@ def DiagnosisWindow():
     HDL = IntVar()
     AlkalinePhosphatase = IntVar()
 
-    Smoker = Smoking()
-
+    Smoker = None
 
     Labelsfont = ("Lato", 13)
 
     ############################################
 
     def GenerateTextFile(name):
+        Smoker = Smoking()
         PatientName = name
-        DiagnosisFile = open(FilePath + "\\" + PatientName + ".txt", 'w')
+        DiagnosisFile = open(FilePath + "\\" + PatientName + ".txt", 'w+')
         DiagnosisFile.write("Patient Name: " + PatientName + "\n")
         DiagnosisFile.write("Smoking : " + Smoker + "\n")
         DiagnosisFile.write("White Blood Cells : " + str(WBC.get()) + " units\n")
@@ -339,7 +340,8 @@ def DiagnosisWindow():
             if WBC.get() > 15500:
                 DiagnosisFile.write("High WBC(White blood cells):\n"
                                     "Usually indicated that there is an infection if there is a fever.\n"
-                                    "In other rare cases, very high WBC count may indicate about blood disease or cancer.\n\n")
+                                    "In other rare cases, very high WBC count may indicate about blood disease or "
+                                    "cancer.\n\n")
             elif WBC.get() < 5500:
                 DiagnosisFile.write("Low WBC(White blood cells):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
@@ -390,7 +392,7 @@ def DiagnosisWindow():
                                     "a high-protein diet.\n\n")
             elif Urea.get() < 17:
                 DiagnosisFile.write("Low Urea:\n"
-                                    "Malnutrition , alow protein diet or liver disease.\n"
+                                    "Malnutrition , a low protein diet or liver disease.\n"
                                     "It should be noted that in pregnancy the level of the infiltrator(Urea) "
                                     "decreases.\n\n")
 
@@ -462,7 +464,8 @@ def DiagnosisWindow():
             if WBC.get() > 11000:
                 DiagnosisFile.write("High WBC(White blood cells):\n"
                                     "Usually indicated that there is an infection if there is a fever.\n"
-                                    "In other rare cases, very high WBC count may indicate about blood disease or cancer.\n\n")
+                                    "In other rare cases, very high WBC count may indicate about blood disease or "
+                                    "cancer.\n\n")
             elif WBC.get() < 4500:
                 DiagnosisFile.write("Low WBC(White blood cells):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
@@ -513,7 +516,7 @@ def DiagnosisWindow():
                                     "a high-protein diet.\n\n")
             elif Urea.get() < 17:
                 DiagnosisFile.write("Low Urea:\n"
-                                    "Malnutrition , alow protein diet or liver disease.\n"
+                                    "Malnutrition , a low protein diet or liver disease.\n"
                                     "It should be noted that in pregnancy the level of the infiltrator(Urea) "
                                     "decreases.\n\n")
 
