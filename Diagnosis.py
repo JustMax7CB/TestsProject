@@ -39,7 +39,7 @@ def DiagnosisWindow():
     DiagnoseWindow.config(menu=MenuBar)
 
     ############# Variables ####################
-    FilePath = r'C:\Users\****\Desktop\TestsProject'
+    FilePath = r'C:\Users\Sman9\Desktop\TestsProject'
     PatientName = StringVar()
     PatientAge = IntVar()
     PatientGender = StringVar()
@@ -130,7 +130,7 @@ def DiagnosisWindow():
                       orient=HORIZONTAL, variable=RBC,
                       background="salmon").grid(row=7, column=2, sticky=W)
 
-    HCT_Label = ttk.Label(DiagnoseWindow, width=30, text="HCT (in %)", font=Labelsfont).grid(row=8,
+    HCT_Label = ttk.Label(DiagnoseWindow, width=30, text="Hematocrit (in %)", font=Labelsfont).grid(row=8,
                                                                                              column=1,
                                                                                              sticky=W)
     HCT_Scale = Scale(DiagnoseWindow, from_=0, to=100, length=400, tickinterval=5, orient=HORIZONTAL, variable=HCT,
@@ -193,5 +193,120 @@ def DiagnosisWindow():
                 DiagnosisFile.write("High Neut(Neutrophil):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
                                     "- cancer.\n")
+            elif Neut.get() < 28:
+                DiagnosisFile.write("Low Neut(Neutrophil):\n"
+                                    "Indicate a disturbance in blood formation of a tendency to infections from \n"
+                                    "bacteria and in rare cases - a cancerous process.\n")
+
+            if Lymph.get() > 52:
+                DiagnosisFile.write("High Lymph(Lymphocytes):\n"
+                                    "Indicates about a problem in creating blood cells.\n")
+            elif Lymph.get() < 36:
+                DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
+                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n")
+
+            if float(RBC.get()) > 6:
+                DiagnosisFile.write("High RBC(Red blood cells):\n"
+                                    "Could indicate on disturbance in the blood production system,\n"
+                                    "high levels were also observed in smokers and in lung disease patients.\n")
+            elif float(RBC.get()) < 4.5:
+                DiagnosisFile.write("Low RBC(Red blood cells):\n"
+                                    "Could indicate on anemia or heavy bleeding.\n")
+
+            if PatientGender == "Male":
+                if HCT.get() > 54:
+                    DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                        "Usually found in smokers.\n")
+                elif HCT.get() < 37:
+                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                        "Indicate mostly about bleeding or anemia.\n")
+            elif PatientGender == "Female":
+                if HCT.get() > 47:
+                    DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                        "Usually found in smokers.\n")
+                elif HCT.get() < 33:
+                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                        "Indicate mostly about bleeding or anemia.\n")
+
+            if Urea.get() > 43:
+                DiagnosisFile.write("High Urea:\n"
+                                    "Could indicate on kidney disease, dehydration or\n"
+                                    "a high-protein diet.\n")
+            elif Urea.get() < 17:
+                DiagnosisFile.write("Low Urea:\n"
+                                    "Malnutrition , alow protein diet or liver disease.\n"
+                                    "It should be noted that in pregnancy the level of the infiltrator(Urea) "
+                                    "decreases.\n")
+
+            if float(Hb.get()) < 11.5:
+                DiagnosisFile.write("Low Hb(Hemoglobin):\n"
+                                    "Indicative of anemia.\n"
+                                    "This could be due to hematological disorder from iron deficiency and bleeding.\n")
+
+            if 0 <= PatientAge.get() <= 2:
+                if float(CHNO.get()) > 0.5:
+                    DiagnosisFile.write("High CHNO(Creatinine):\n"
+                                        "May indicate a kidney problem and in severe cases kidney failure.\n"
+                                        "High values can also be found during diarrhea and vomiting\n"
+                                        "(Causes of increased muscle breakdown and high values of creatinine),\n"
+                                        "muscle disease and increased consumption of meat.\n")
+                if float(CHNO.get()) < 0.2:
+                    DiagnosisFile.write("Low CHNO(Creatinine):\n"
+                                        "Most often seen in patients with very poor muscle mass and malnourished\n"
+                                        "people who do not consume enough protein")
+            elif PatientAge.get() > 2:
+                if float(CHNO.get()) > 1:
+                    DiagnosisFile.write("High CHNO(Creatinine):\n"
+                                        "May indicate a kidney problem and in severe cases kidney failure.\n"
+                                        "High values can also be found during diarrhea and vomiting\n"
+                                        "(Causes of increased muscle breakdown and high values of creatinine),\n"
+                                        "muscle disease and increased consumption of meat.\n")
+                if float(CHNO.get()) < 0.5:
+                    DiagnosisFile.write("Low CHNO(Creatinine):\n"
+                                        "Most often seen in patients with very poor muscle mass and malnourished\n"
+                                        "people who do not consume enough protein")
+
+            if PatientGender == "Male":
+                if Iron.get() > 160:
+                    DiagnosisFile.write("High Iron:\n"
+                                        "Could indicate iron poisoning.\n")
+                elif Iron.get() < 60:
+                    DiagnosisFile.write("Low Iron:\n"
+                                        "Usually attests to an inadequate diet or\nan increase in iron requirement"
+                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n")
+            if PatientGender == "Female":
+                if Iron.get() > 160*0.8:
+                    DiagnosisFile.write("High Iron:\n"
+                                        "Could indicate iron poisoning.\n")
+                elif Iron.get() < 60*0.8:
+                    DiagnosisFile.write("Low Iron:\n"
+                                        "Usually attests to an inadequate diet or\nan increase in iron requirement"
+                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n")
+
+            if PatientGender == "Male":
+                if HDL.get() > 62:
+                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n")
+                elif HDL.get() < 29:
+                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
+                                        "blood) or about adult diabetes.\n")
+            elif PatientGender == "Female":
+                if HDL.get() > 82:
+                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n")
+                elif HDL.get() < 34:
+                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
+                                        "blood) or about adult diabetes.\n")
+
+            if AlkalinePhosphatase.get() > 120:
+                DiagnosisFile.write("High Alkaline Phosphatase:\n"
+                                    "Could indicate about liver disease, biliary diseases, pregnancy, Hyperthyroidism"
+                                    "(Hyperactivity of thyroid gland) or use of various medications.\n")
+            if AlkalinePhosphatase.get() < 60:
+                DiagnosisFile.write("Low Alkaline Phosphatase:\n"
+                                    "May indicate a poor diet that lacks proteins.\n"
+                                    "lack in vitamins like B12, C, B6 and folic acid.\n")
         DiagnosisFile.close()
     DiagnoseWindow.mainloop()
