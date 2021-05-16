@@ -341,20 +341,34 @@ def DiagnosisWindow():
                 DiagnosisFile.write("High WBC(White blood cells):\n"
                                     "Usually indicated that there is an infection if there is a fever.\n"
                                     "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer.\n\n")
+                                    "cancer."
+                                    "Recommended treatment:\n"
+                                    "for infection: Specific antibiotic.\n"
+                                    "for blood disease a combination of cyclophospamide and corticosurides.\n"
+                                    "for cancer: Entrectinib.\n\n")
             elif WBC.get() < 5500:
                 DiagnosisFile.write("Low WBC(White blood cells):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n\n")
+                                    "- cancer."
+                                    "Recommended treatment:\n"
+                                    "for viral disease: Rest at home.\n"
+                                    "for cancer: Entrectinib.\n\n")
 
             if Neut.get() > 54:
                 DiagnosisFile.write("High Neut(Neutrophil):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n\n")
+                                    "- cancer."
+                                    "Recommended treatment:\n"
+                                    "for bacterial infection: Specific antibiotic.\n")
             elif Neut.get() < 28:
                 DiagnosisFile.write("Low Neut(Neutrophil):\n"
                                     "Indicate a disturbance in blood formation of a tendency to infections from \n"
-                                    "bacteria and in rare cases - a cancerous process.\n\n")
+                                    "bacteria and in rare cases - a cancerous process."
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n"
+                                    "for infections: Specific antibiotic.\n"
+                                    "for cancer: Entrectinib\n\n")
 
             if Lymph.get() > 52:
                 DiagnosisFile.write("High Lymph(Lymphocytes):\n"
@@ -465,20 +479,34 @@ def DiagnosisWindow():
                 DiagnosisFile.write("High WBC(White blood cells):\n"
                                     "Usually indicated that there is an infection if there is a fever.\n"
                                     "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer.\n\n")
+                                    "cancer."
+                                    "Recommended treatment:\n"
+                                    "for infection: Specific antibiotic.\n"
+                                    "for blood disease a combination of cyclophospamide and corticosurides.\n"
+                                    "for cancer: Entrectinib.\n\n")
             elif WBC.get() < 4500:
                 DiagnosisFile.write("Low WBC(White blood cells):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n\n")
+                                    "- cancer."
+                                    "Recommended treatment:\n"
+                                    "for viral disease: Rest at home.\n"
+                                    "for cancer: Entrectinib.\n\n")
 
             if Neut.get() > 54:
                 DiagnosisFile.write("High Neut(Neutrophil):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n\n")
+                                    "- cancer.\n"
+                                    "Recommended treatment:\n"
+                                    "for bacterial infection: Specific antibiotic.\n\n")
             elif Neut.get() < 28:
                 DiagnosisFile.write("Low Neut(Neutrophil):\n"
                                     "Indicate a disturbance in blood formation of a tendency to infections from \n"
-                                    "bacteria and in rare cases - a cancerous process.\n\n")
+                                    "bacteria and in rare cases - a cancerous process.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n"
+                                    "for infections: Specific antibiotic.\n"
+                                    "for cancer: Entrectinib\n\n")
 
             if Lymph.get() > 52:
                 DiagnosisFile.write("High Lymph(Lymphocytes):\n"
@@ -543,7 +571,7 @@ def DiagnosisWindow():
                 if float(CHNO.get()) < 0.6:
                     DiagnosisFile.write("Low CHNO(Creatinine):\n"
                                         "Most often seen in patients with very poor muscle mass and "
-                                        "malnourished\n "
+                                        "malnourished\n"
                                         "people who do not consume enough protein.\n\n")
             elif PatientAge.get() >= 60:
                 if float(CHNO.get()) > 1.2:
