@@ -221,7 +221,7 @@ def DiagnosisWindow():
                                     "Indicates about a problem in creating blood cells.\n"
                                     "Recommended treatment:\n"
                                     "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n")
+                                    "1 5mg pill of Folic acid once a day for a month.\n\n")
             elif Lymph.get() < 36:
                 DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
                                     "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
