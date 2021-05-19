@@ -218,15 +218,24 @@ def DiagnosisWindow():
 
             if Lymph.get() > 52:
                 DiagnosisFile.write("High Lymph(Lymphocytes):\n"
-                                    "Indicates about a problem in creating blood cells.\n\n")
+                                    "Indicates about a problem in creating blood cells.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n")
             elif Lymph.get() < 36:
                 DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
-                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n\n")
+                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
+                                    "Recommended treatment:\n"
+                                    "for bacterial infection: Specific antibiotic.\n"
+                                    "for lymphoma cancer: Entrectinib.\n\n")
 
             if float(RBC.get()) > 6:
                 DiagnosisFile.write("High RBC(Red blood cells):\n"
                                     "Could indicate on disturbance in the blood production system,\n"
-                                    "high levels were also observed in smokers and in lung disease patients.\n\n")
+                                    "high levels were also observed in smokers and in lung disease patients.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n\n")
             elif float(RBC.get()) < 4.5:
                 DiagnosisFile.write("Low RBC(Red blood cells):\n"
                                     "Could indicate on anemia or heavy bleeding.\n"
@@ -242,29 +251,50 @@ def DiagnosisWindow():
                                         "for smokers: Stop smoking.")
                 elif HCT.get() < 37:
                     DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n\n")
+                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "Recommended treatment:\n"
+                                        "for bleeding : Urgently evacuate to a hospital.\n"
+                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
             elif PatientGender == "Female":
                 if HCT.get() > 47:
                     DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n\n")
+                                        "Usually found in smokers.\n"
+                                        "Recommended treatment:\n"
+                                        "for smoking: Stop smoking.\n\n")
                 elif HCT.get() < 33:
                     DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n\n")
+                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "Recommended treatment:\n"
+                                        "for bleeding : Urgently evacuate to a hospital.\n"
+                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
 
             if Urea.get() > 43:
                 DiagnosisFile.write("High Urea:\n"
                                     "Could indicate on kidney disease, dehydration or\n"
-                                    "a high-protein diet.\n\n")
+                                    "a high-protein diet.\n"
+                                    "Recommended treatment:\n"
+                                    "for kidney disease: balance sugar levels in blood.\n"
+                                    "for dehydration: Complete rest lying down and returning fluids by drinking\n"
+                                    "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
             elif Urea.get() < 17:
                 DiagnosisFile.write("Low Urea:\n"
                                     "Malnutrition , a low protein diet or liver disease.\n"
                                     "It should be noted that in pregnancy the level of the infiltrator(Urea) "
-                                    "decreases.\n\n")
+                                    "decreases.\n"
+                                    "Recommended treatment:\n"
+                                    "for Malnutrition: Arrange an appointment with a nutritionist.\n"
+                                    "for a low protein diet: Arrange an appointment with a nutritionist.\n"
+                                    "for a liver disease: Referral to a specific diagnosis for the purpose of "
+                                    "determining treatment.\n")
 
             if float(Hb.get()) < 11.5:
                 DiagnosisFile.write("Low Hb(Hemoglobin):\n"
                                     "Indicative of anemia.\n"
-                                    "This could be due to hematological disorder from iron deficiency and bleeding.\n\n")
+                                    "This could be due to hematological disorder from iron deficiency and bleeding.\n"
+                                    "for Recommended treatment:\n"
+                                    "for hematological disorder: Injection of a hormone to encourage red blood cell "
+                                    "production.\n "
+                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
 
             if 0 <= PatientAge.get() <= 2:
                 if float(CHNO.get()) > 0.5:
@@ -272,7 +302,13 @@ def DiagnosisWindow():
                                         "May indicate a kidney problem and in severe cases kidney failure.\n"
                                         "High values can also be found during diarrhea and vomiting\n"
                                         "(Causes of increased muscle breakdown and high values of creatinine),\n"
-                                        "muscle disease and increased consumption of meat.\n\n")
+                                        "muscle disease and increased consumption of meat.\n"
+                                        "Recommended treatment:\n"
+                                        "for kindey problem: balance sugar levels in blood.\n"
+                                        "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
+                                        "for a month.\n"
+                                        "for increased consumption of meat: Arrange an appointment with a "
+                                        "nutritionist.\n\n")
                 if float(CHNO.get()) < 0.2:
                     DiagnosisFile.write("Low CHNO(Creatinine):\n"
                                         "Most often seen in patients with very poor muscle mass and malnourished\n"
@@ -341,7 +377,7 @@ def DiagnosisWindow():
                 DiagnosisFile.write("High WBC(White blood cells):\n"
                                     "Usually indicated that there is an infection if there is a fever.\n"
                                     "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer."
+                                    "cancer.\n"
                                     "Recommended treatment:\n"
                                     "for infection: Specific antibiotic.\n"
                                     "for blood disease a combination of cyclophospamide and corticosurides.\n"
@@ -349,7 +385,7 @@ def DiagnosisWindow():
             elif WBC.get() < 5500:
                 DiagnosisFile.write("Low WBC(White blood cells):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer."
+                                    "- cancer.\n"
                                     "Recommended treatment:\n"
                                     "for viral disease: Rest at home.\n"
                                     "for cancer: Entrectinib.\n\n")
@@ -357,13 +393,13 @@ def DiagnosisWindow():
             if Neut.get() > 54:
                 DiagnosisFile.write("High Neut(Neutrophil):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer."
+                                    "- cancer.\n"
                                     "Recommended treatment:\n"
                                     "for bacterial infection: Specific antibiotic.\n")
             elif Neut.get() < 28:
                 DiagnosisFile.write("Low Neut(Neutrophil):\n"
                                     "Indicate a disturbance in blood formation of a tendency to infections from \n"
-                                    "bacteria and in rare cases - a cancerous process."
+                                    "bacteria and in rare cases - a cancerous process.\n"
                                     "Recommended treatment:\n"
                                     "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
                                     "1 5mg pill of Folic acid once a day for a month.\n"
@@ -372,33 +408,55 @@ def DiagnosisWindow():
 
             if Lymph.get() > 52:
                 DiagnosisFile.write("High Lymph(Lymphocytes):\n"
-                                    "Indicates about a problem in creating blood cells.\n\n")
+                                    "Indicates about a problem in creating blood cells.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n")
             elif Lymph.get() < 36:
                 DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
-                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n\n")
+                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
+                                    "Recommended treatment:\n"
+                                    "for bacterial infection: Specific antibiotic.\n"
+                                    "for lymphoma cancer: Entrectinib.\n\n")
 
             if float(RBC.get()) > 6:
                 DiagnosisFile.write("High RBC(Red blood cells):\n"
                                     "Could indicate on disturbance in the blood production system,\n"
-                                    "high levels were also observed in smokers and in lung disease patients.\n\n")
+                                    "high levels were also observed in smokers and in lung disease patients.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n")
             elif float(RBC.get()) < 4.5:
                 DiagnosisFile.write("Low RBC(Red blood cells):\n"
-                                    "Could indicate on anemia or heavy bleeding.\n\n")
+                                    "Could indicate on anemia or heavy bleeding.\n"
+                                    "Recommended treatment:\n"
+                                    "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
+                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
 
             if PatientGender == "Male":
                 if HCT.get() > 54:
                     DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n\n")
+                                        "Usually found in smokers.\n"
+                                        "Recommended treatment:\n"
+                                        "for smoking: Stop smoking.\n\n")
                 elif HCT.get() < 37:
                     DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n\n")
+                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "Recommended treatment:\n"
+                                        "for bleeding : Urgently evacuate to a hospital.\n"
+                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
             elif PatientGender == "Female":
                 if HCT.get() > 47:
                     DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n\n")
+                                        "Usually found in smokers.\n"
+                                        "Recommended treatment:\n"
+                                        "for smoking: Stop smoking.\n\n")
                 elif HCT.get() < 33:
                     DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n\n")
+                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "Recommended treatment:\n"
+                                        "for bleeding : Urgently evacuate to a hospital.\n"
+                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
 
             if Urea.get() > 43:
                 DiagnosisFile.write("High Urea:\n"
@@ -479,7 +537,7 @@ def DiagnosisWindow():
                 DiagnosisFile.write("High WBC(White blood cells):\n"
                                     "Usually indicated that there is an infection if there is a fever.\n"
                                     "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer."
+                                    "cancer.\n"
                                     "Recommended treatment:\n"
                                     "for infection: Specific antibiotic.\n"
                                     "for blood disease a combination of cyclophospamide and corticosurides.\n"
@@ -487,7 +545,7 @@ def DiagnosisWindow():
             elif WBC.get() < 4500:
                 DiagnosisFile.write("Low WBC(White blood cells):\n"
                                     "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer."
+                                    "- cancer.\n"
                                     "Recommended treatment:\n"
                                     "for viral disease: Rest at home.\n"
                                     "for cancer: Entrectinib.\n\n")
@@ -510,33 +568,55 @@ def DiagnosisWindow():
 
             if Lymph.get() > 52:
                 DiagnosisFile.write("High Lymph(Lymphocytes):\n"
-                                    "Indicates about a problem in creating blood cells.\n\n")
+                                    "Indicates about a problem in creating blood cells.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n")
             elif Lymph.get() < 36:
                 DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
-                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n\n")
+                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
+                                    "Recommended treatment:\n"
+                                    "for bacterial infection: Specific antibiotic.\n"
+                                    "for lymphoma cancer: Entrectinib.\n\n")
 
             if float(RBC.get()) > 6:
                 DiagnosisFile.write("High RBC(Red blood cells):\n"
                                     "Could indicate on disturbance in the blood production system,\n"
-                                    "high levels were also observed in smokers and in lung disease patients.\n\n")
+                                    "high levels were also observed in smokers and in lung disease patients.\n"
+                                    "Recommended treatment:\n"
+                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                    "1 5mg pill of Folic acid once a day for a month.\n")
             elif float(RBC.get()) < 4.5:
                 DiagnosisFile.write("Low RBC(Red blood cells):\n"
-                                    "Could indicate on anemia or heavy bleeding.\n\n")
+                                    "Could indicate on anemia or heavy bleeding.\n"
+                                    "Recommended treatment:\n"
+                                    "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
+                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
 
             if PatientGender == "Male":
                 if HCT.get() > 54:
                     DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n\n")
+                                        "Usually found in smokers.\n"
+                                        "Recommended treatment:\n"
+                                        "for smoking: Stop smoking.\n\n")
                 elif HCT.get() < 37:
                     DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n\n")
+                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "Recommended treatment:\n"
+                                        "for bleeding : Urgently evacuate to a hospital.\n"
+                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
             elif PatientGender == "Female":
                 if HCT.get() > 47:
                     DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n\n")
+                                        "Usually found in smokers.\n"
+                                        "Recommended treatment:\n"
+                                        "for smoking: Stop smoking.\n\n")
                 elif HCT.get() < 33:
                     DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n\n")
+                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "Recommended treatment:\n"
+                                        "for bleeding : Urgently evacuate to a hospital.\n"
+                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
 
             if Urea.get() > 43:
                 DiagnosisFile.write("High Urea:\n"
