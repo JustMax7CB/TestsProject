@@ -8,7 +8,7 @@ import Diagnosis
 def main():
     MainWindow = Tk()
     MainWindow.title("Diagnosis App")
-    MainWindow.geometry("400x130")
+    MainWindow.geometry("400x150")
     MainWindow.resizable(width=False, height=False)
 
     MainWindow.grid_columnconfigure(3)
@@ -16,15 +16,20 @@ def main():
 
     UsernameEntry = StringVar()
     PasswordEntry = StringVar()
+    IDEntry = IntVar()
 
     UsernameLabel = Label(MainWindow, text="Username", font=("Lato", 11)).grid(row=1, column=1, padx=5, pady=5)
     UsernameTextBox = ttk.Entry(MainWindow, width=30, textvariable=UsernameEntry)
-    UsernameTextBox.grid(row=1, column=2, padx=5, pady=5)
+    UsernameTextBox.grid(row=1, column=2, padx=2, pady=2)
     UsernameTextBox.focus()
 
     PasswordLabel = Label(MainWindow, text="Password", font=("Lato", 11)).grid(row=2, column=1, padx=5, pady=5)
     PasswordTextBox = ttk.Entry(MainWindow, width=30, textvariable=PasswordEntry, show="*")
-    PasswordTextBox.grid(row=2, column=2, padx=5, pady=5)
+    PasswordTextBox.grid(row=2, column=2, padx=2, pady=2)
+
+    IDLabel = Label(MainWindow, text="ID", font=("Lato", 11)).grid(row=3, column=1, padx=5, pady=5)
+    IDTextBox = ttk.Entry(MainWindow, width=30, textvariable=IDEntry)
+    IDTextBox.grid(row=3, column=2, padx=2, pady=2)
 
     ShowPassword = ttk.Button(MainWindow, text="Show", width=5,
                               command=lambda: PasswordTextBox.configure(show="")).grid(row=2, column=3)
@@ -33,22 +38,25 @@ def main():
     ExitButton = Button(MainWindow, text="Exit", font=('Lato', 11), width=8, command=quit) \
         .grid(row=5, column=2, padx=5, pady=5)
     LoginButton = Button(MainWindow, text="Login", font=('Lato', 11), width=8,
-                         command=lambda: Login(UsernameEntry.get(), PasswordEntry.get(), MainWindow))\
+                         command=lambda: Login(UsernameEntry.get(), PasswordEntry.get(), IDEntry.get(), MainWindow))\
         .grid(row=5, column=1, padx=5, pady=5)
     MainWindow.mainloop()
 
 
-def Login(username, password, window):
+def Login(username, password, id, window):
+    print(id)
     UserNames = list()
     Passwords = list()
+    IDs = list()
     UsersSheet = Database.MainSheet
     index = 2
     while UsersSheet.cell(row=index, column=1).value is not None:
         UserNames.append(UsersSheet.cell(row=index, column=1).value)
         Passwords.append(UsersSheet.cell(row=index, column=2).value)
+        IDs.append(UsersSheet.cell(row=index, column=3).value)
         index += 1
 
-    if (8 >= len(username) >= 6 and username in UserNames) and (10 >= len(password) >= 8 and password in Passwords):
+    if (8 >= len(username)) and (10 >= len(password) >= 8):
         User = list(username)
         NumCount = 0
         for letter in range(0, len(User)):
@@ -72,9 +80,12 @@ def Login(username, password, window):
             if not result:
                 messagebox.showerror("invalid login attempt", "username or password is incorrect!")
             else:
-                messagebox.showinfo("Success!", "Login Successful!")
-                window.destroy()
-                Diagnosis.DiagnosisWindow()
+                if username in UserNames and password in Passwords and id in IDs:
+                    messagebox.showinfo("Success!", "Login Successful!")
+                    window.destroy()
+                    Diagnosis.DiagnosisWindow()
+                else:
+                    messagebox.showerror("invalid login attempt", "username or password is incorrect!")
         else:
             messagebox.showerror("invalid login attempt", "username or password is incorrect!")
     else:
