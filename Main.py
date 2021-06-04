@@ -44,7 +44,6 @@ def main():
 
 
 def Login(username, password, id, window):
-    print(id)
     UserNames = list()
     Passwords = list()
     IDs = list()
