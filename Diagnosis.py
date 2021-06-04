@@ -1,6 +1,6 @@
 import os
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from tkinter.messagebox import askquestion
 import Main
 
@@ -8,7 +8,7 @@ import Main
 def DiagnosisWindow():
     DiagnoseWindow = Tk()
     DiagnoseWindow.title("Diagnosis window")
-    DiagnoseWindow.geometry("1280x768")
+    DiagnoseWindow.geometry("1680x768")
     DiagnoseWindow.resizable(width=False, height=False)
 
     DiagnoseWindow.grid_rowconfigure(15)
@@ -16,18 +16,22 @@ def DiagnosisWindow():
 
     def Smoking():
         Smoker = askquestion(title='Smoking?', message='Does the Patient Smoking?')
-        return Smoker
+        return Smoker.upper()
 
     def Disconnect(window):
         window.destroy()
         Main.main()
+
+    def New():
+        DiagnoseWindow.destroy()
+        DiagnosisWindow()
 
     ######## Menu Bar ##################
     MenuBar = Menu(DiagnoseWindow)
 
     FileMenu = Menu(MenuBar, tearoff=0)
     FileMenu.add_separator()
-    FileMenu.add_command(label="New")
+    FileMenu.add_command(label="New", command=New)
     FileMenu.add_command(label="Exit", command=quit)
     MenuBar.add_cascade(label="File", menu=FileMenu)
 
@@ -41,7 +45,6 @@ def DiagnosisWindow():
 
     ############# Variables ####################
     FilePath = os.getcwd() + "\Patients\\"
-    print(FilePath)
     PatientName = StringVar()
     PatientAge = IntVar()
     PatientGender = StringVar()
@@ -51,8 +54,8 @@ def DiagnosisWindow():
     RBC = DoubleVar()
     HCT = IntVar()
     Urea = IntVar()
-    Hb = IntVar()
-    CHNO = IntVar()
+    Hb = DoubleVar()
+    CHNO = DoubleVar()
     Iron = IntVar()
     HDL = IntVar()
     AlkalinePhosphatase = IntVar()
@@ -60,8 +63,35 @@ def DiagnosisWindow():
     Labelsfont = ("Lato", 13)
 
     ############################################
+    def EditFile():
+        TextFileDisplay.configure(state=NORMAL)
+
+    def SaveFile():
+        File = None
+        try:
+            File = open(FilePath + PatientName.get() + ".txt", 'w')
+        except:
+            print("Patient file doesn't exist")
+        if File:
+            data = TextFileDisplay.get(1.0, END)
+            File.write(data)
+            File.close()
+            TextFileDisplay.configure(state=DISABLED
+                                      )
+
+    def OpenDiagnoseFile(name):
+        File = None
+        try:
+            File = open(FilePath + name + ".txt")
+        except:
+            print("Patient file doesn't exist")
+        if File:
+            TextFileDisplay.insert(1.0, File.read())
+            File.close()
+        TextFileDisplay.configure(state=DISABLED)
 
     def GenerateTextFile(name):
+        TextFileDisplay.configure(state=NORMAL)
         Smoker = Smoking()
         PatientName = name
         DiagnosisFile = open(FilePath + PatientName + ".txt", 'w+')
@@ -85,10 +115,29 @@ def DiagnosisWindow():
     ############## Buttons #####################
 
     ConfirmSelection = Button(DiagnoseWindow, text="Confirm", width=20, height=1, background="sienna2",
-                              font=Labelsfont, relief=GROOVE, command=lambda: GenerateTextFile(PatientName.get())).grid(
-        row=11, column=5)
+                              font=Labelsfont, relief=GROOVE, command=lambda: GenerateTextFile(PatientName.get()))
+    ConfirmSelection.place(x=850, y=707, width=110, height=40)
 
+    ExitButton = Button(DiagnoseWindow, text="Exit", width=10, height=1, background="sienna2",
+                        font=Labelsfont, relief=GROOVE, command=lambda: quit(0))
+    ExitButton.place(x=1580, y=707, width=70, height=40)
+
+    EditButton = Button(DiagnoseWindow, text="Edit", width=20, height=1, background="light blue",
+                        font=Labelsfont, relief=GROOVE, command=EditFile)
+    EditButton.place(x=1120, y=635, width=70, height=35)
+
+    SaveButton = Button(DiagnoseWindow, text="Save", width=20, height=1, background="light blue",
+                        font=Labelsfont, relief=GROOVE, command=SaveFile)
+    SaveButton.place(x=1200, y=635, width=70, height=35)
     #############################################
+
+    TextFileDisplay = Text(DiagnoseWindow, width=10, height=10, font=Labelsfont, state=DISABLED)
+    TextFileDisplay.place(x=1120, y=50, width=500, height=570)
+
+    TextFileScrollBar = Scrollbar(DiagnoseWindow, orient=VERTICAL)
+    TextFileDisplay.configure(yscrollcommand=TextFileScrollBar.set)
+    TextFileScrollBar.configure(command=TextFileDisplay.yview)
+    TextFileScrollBar.place(x=1615, y=50, height=570)
 
     Patient_Name_Label = ttk.Label(DiagnoseWindow, width=30, text="Name:", font=Labelsfont).grid(row=1,
                                                                                                  column=1,
@@ -163,8 +212,8 @@ def DiagnosisWindow():
                        background="seashell4").grid(row=12, column=2, sticky=W)
 
     HDL_Label = ttk.Label(DiagnoseWindow, width=30, text="High Density Lipoprotein", font=Labelsfont).grid(row=13,
-                                                                                        column=1,
-                                                                                        sticky=W)
+                                                                                                           column=1,
+                                                                                                           sticky=W)
     HDL_Scale = Scale(DiagnoseWindow, from_=20, to=100, length=450, tickinterval=12, orient=HORIZONTAL, variable=HDL,
                       background="goldenrod").grid(row=13, column=2, sticky=W)
 
@@ -680,7 +729,7 @@ def DiagnosisWindow():
                                     "Indicates about a problem in creating blood cells.\n"
                                     "Recommended treatment:\n"
                                     "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n")
+                                    "1 5mg pill of Folic acid once a day for a month.\n\n")
             elif lymph < 36:
                 DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
                                     "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
@@ -886,5 +935,6 @@ def DiagnosisWindow():
 
         DiagnosisFile.close()
         messagebox.showinfo("Diagnose Done!", "Diagnose Done!\n File created!")
+        OpenDiagnoseFile(PatientName.get())
 
     DiagnoseWindow.mainloop()
