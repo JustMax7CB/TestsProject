@@ -232,8 +232,8 @@ def DiagnosisWindow(topLevel):
                                       variable=AlkalinePhosphatase,
                                       background="dark salmon").grid(row=14, column=2, sticky=W)
 
-
     def Diagnose():
+        nonlocal PatientGender
         nonlocal PatientsFolder
         DiagnosisFile = None
         try:
@@ -243,6 +243,7 @@ def DiagnosisWindow(topLevel):
         if DiagnosisFile:
             DiagnosisFile.write("\nDiagnosis:\n\n")
             Patient_age = PatientAge.get()
+            PatientGender = PatientGender.get()
             wbc = WBC.get()
             neut = Neut.get()
             lymph = Lymph.get()
@@ -321,7 +322,7 @@ def DiagnosisWindow(topLevel):
                         DiagnosisFile.write("High HCT(Hematocrit):\n"
                                             "Usually found in smokers.\n"
                                             "Recommended treatment:\n"
-                                            "for smokers: Stop smoking.")
+                                            "for smokers: Stop smoking.\n\n")
                     elif hct < 37:
                         DiagnosisFile.write("Low HCT(Hematocrit):\n"
                                             "Indicate mostly about bleeding or anemia.\n"
@@ -523,7 +524,7 @@ def DiagnosisWindow(topLevel):
                                         "cases "
                                         "- cancer.\n"
                                         "Recommended treatment:\n"
-                                        "for bacterial infection: Specific antibiotic.\n")
+                                        "for bacterial infection: Specific antibiotic.\n\n")
                 elif neut < 28:
                     DiagnosisFile.write("Low Neut(Neutrophil):\n"
                                         "Indicate a disturbance in blood formation of a tendency to infections from \n"
@@ -539,7 +540,7 @@ def DiagnosisWindow(topLevel):
                                         "Indicates about a problem in creating blood cells.\n"
                                         "Recommended treatment:\n"
                                         "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                        "1 5mg pill of Folic acid once a day for a month.\n")
+                                        "1 5mg pill of Folic acid once a day for a month.\n\n")
                 elif lymph < 36:
                     DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
                                         "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
@@ -553,7 +554,7 @@ def DiagnosisWindow(topLevel):
                                         "high levels were also observed in smokers and in lung disease patients.\n"
                                         "Recommended treatment:\n"
                                         "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                        "1 5mg pill of Folic acid once a day for a month.\n")
+                                        "1 5mg pill of Folic acid once a day for a month.\n\n")
                 elif rbc < 4.5:
                     DiagnosisFile.write("Low RBC(Red blood cells):\n"
                                         "Could indicate on anemia or heavy bleeding.\n"
@@ -650,7 +651,7 @@ def DiagnosisWindow(topLevel):
                                             "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
                                             "month.\n "
                                             "for blood loss: Urgently evacuate to a hospital.\n\n")
-                if PatientGender == "Female":
+                elif PatientGender == "Female":
                     if iron > 160 * 0.8:
                         DiagnosisFile.write("High Iron:\n"
                                             "Could indicate iron poisoning.\n"
@@ -709,7 +710,7 @@ def DiagnosisWindow(topLevel):
                                         "for use of various medications: Referral to the family doctor for a match "
                                         "test "
                                         "between the medications.\n\n")
-                if alkaline < 60:
+                elif alkaline < 60:
                     DiagnosisFile.write("Low Alkaline Phosphatase:\n"
                                         "May indicate a poor diet that lacks proteins.\n"
                                         "lack in vitamins like B12, C, B6 and folic acid.\n"
@@ -777,7 +778,7 @@ def DiagnosisWindow(topLevel):
                                         "high levels were also observed in smokers and in lung disease patients.\n"
                                         "Recommended treatment:\n"
                                         "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                        "1 5mg pill of Folic acid once a day for a month.\n")
+                                        "1 5mg pill of Folic acid once a day for a month.\n\n")
                 elif rbc < 4.5:
                     DiagnosisFile.write("Low RBC(Red blood cells):\n"
                                         "Could indicate on anemia or heavy bleeding.\n"
@@ -849,6 +850,7 @@ def DiagnosisWindow(topLevel):
                                             "for hematological disorder: Injection of a hormone to encourage red blood "
                                             "cell production.\n"
                                             "for bleeding: Urgently evacuate to a hospital.\n\n")
+
                 if 18 <= PatientAge.get() <= 59:
                     if chno > 1:
                         DiagnosisFile.write("High CHNO(Creatinine):\n"
@@ -906,7 +908,7 @@ def DiagnosisWindow(topLevel):
                                             "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
                                             "month.\n "
                                             "for blood loss: Urgently evacuate to a hospital.\n\n")
-                if PatientGender == "Female":
+                elif PatientGender == "Female":
                     if iron > 160 * 0.8:
                         DiagnosisFile.write("High Iron:\n"
                                             "Could indicate iron poisoning.\n"
@@ -938,9 +940,11 @@ def DiagnosisWindow(topLevel):
                 elif PatientGender == "Female":
                     if hdl > 82:
                         DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
+                                            "Usually harmless. Physical activity raises 'good' cholesterol "
+                                            "levels.\n\n")
                         #  Harmless, doesn't need treatment.
                     elif hdl < 34:
+
                         DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
                                             "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
                                             "the "
@@ -964,7 +968,7 @@ def DiagnosisWindow(topLevel):
                                         "for use of various medications: Referral to the family doctor for a match "
                                         "test "
                                         "between the medications.\n\n")
-                if alkaline < 60:
+                elif alkaline < 60:
                     DiagnosisFile.write("Low Alkaline Phosphatase:\n"
                                         "May indicate a poor diet that lacks proteins.\n"
                                         "lack in vitamins like B12, C, B6 and folic acid.\n"
