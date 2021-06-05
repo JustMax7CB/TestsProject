@@ -1,4 +1,4 @@
-import sys
+import sys, os
 
 from cx_Freeze import setup, Executable
 
@@ -18,12 +18,13 @@ exe = Executable(
     script="Main.py",
     target_name="AutoDoctor",
     base=base,
-    icon='RobotDoctor.ico'
+    icon="C:\\Users\Sman9\Desktop\TestsProject\RobotDoctor.ico",
+
     )
 
 setup(
     name="AutoDoctor",
-    version="1.0",
+    version="0.1",
     description="Program to diagnose blood results and generate a matching treatment.",
     options={'build_exe': build_exe_options},
     executables=[exe]

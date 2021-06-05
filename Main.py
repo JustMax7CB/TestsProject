@@ -1,3 +1,4 @@
+import os
 from tkinter import *
 from tkinter import ttk, messagebox
 
@@ -6,10 +7,12 @@ import Diagnosis
 
 
 def main():
+    os.chdir("C:\\Users\Sman9\Desktop\TestsProject")
     MainWindow = Tk()
     MainWindow.title("Diagnosis App")
     MainWindow.geometry("400x150")
     MainWindow.resizable(width=False, height=False)
+    MainWindow.iconbitmap(os.getcwd() + "\RobotDoctor.ico")
 
     MainWindow.grid_columnconfigure(3)
     MainWindow.grid_rowconfigure(5)

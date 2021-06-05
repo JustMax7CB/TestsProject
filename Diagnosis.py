@@ -6,11 +6,13 @@ import Main
 
 
 def DiagnosisWindow(topLevel):
+    MainFolder = os.getcwd()
     topLevel.destroy()
     DiagnoseWindow = Tk()
     DiagnoseWindow.title("Diagnosis window")
-    DiagnoseWindow.geometry("1680x768")
+    DiagnoseWindow.geometry("1640x786")
     DiagnoseWindow.resizable(width=False, height=False)
+    DiagnoseWindow.iconbitmap(MainFolder + "\RobotDoctor.ico")
 
     DiagnoseWindow.grid_rowconfigure(15)
     DiagnoseWindow.grid_columnconfigure(8)
@@ -62,38 +64,46 @@ def DiagnosisWindow(topLevel):
     Labelsfont = ("Lato", 13)
 
     ############################################
+    PatientsFolder = os.getcwd()
+
     def EditFile():
         TextFileDisplay.configure(state=NORMAL)
 
     def SaveFile():
+        nonlocal PatientsFolder
         File = None
         try:
-            File = open(PatientName.get() + ".txt", 'w')
+            File = open(PatientsFolder + PatientName.get() + ".txt", 'w')
         except:
             messagebox.showerror(title="Error", message="Failed to open the file\n")
         if File:
             data = TextFileDisplay.get(1.0, END)
             File.write(data)
             File.close()
-            TextFileDisplay.configure(state=DISABLED
-                                      )
+            TextFileDisplay.configure(state=DISABLED)
 
     def OpenDiagnoseFile(name):
+        TextFileDisplay.configure(state=NORMAL)
         File = None
         try:
-            File = open(name + ".txt")
+            File = open(PatientsFolder + name + ".txt", 'r+')
         except:
             messagebox.showerror(title="Error", message="Failed to open the file\n")
         if File:
             TextFileDisplay.insert(1.0, File.read())
             File.close()
-        TextFileDisplay.configure(state=DISABLED)
+            TextFileDisplay.configure(state=DISABLED)
 
     def GenerateTextFile(name):
-        TextFileDisplay.configure(state=NORMAL)
+        nonlocal PatientsFolder
+        if not os.path.isdir(os.getcwd() + "\\build\Patients\\"):
+            messagebox.showinfo(title="test", message=os.getcwd() + "\\build\Patients\\")
+            os.makedirs(os.getcwd() + "\\build\Patients\\")
+        PatientsFolder = os.getcwd() + "\\build\Patients\\"
+        TextFileDisplay.configure(state=DISABLED)
         Smoker = Smoking()
         PatientName = name
-        DiagnosisFile = open(os.getcwd() + "\\" + PatientName + ".txt", 'w+')
+        DiagnosisFile = open(PatientsFolder + "\\" + PatientName + ".txt", 'w+')
         DiagnosisFile.write("Patient Name: " + PatientName + "\n")
         DiagnosisFile.write("Smoking : " + Smoker + "\n")
         DiagnosisFile.write("White Blood Cells : " + str(WBC.get()) + " units\n")
@@ -114,19 +124,19 @@ def DiagnosisWindow(topLevel):
 
     ConfirmSelection = Button(DiagnoseWindow, text="Confirm", width=20, height=1, background="sienna2",
                               font=Labelsfont, relief=GROOVE, command=lambda: GenerateTextFile(PatientName.get()))
-    ConfirmSelection.place(x=850, y=707, width=110, height=40)
+    ConfirmSelection.place(x=850, y=707, width=110, height=37)
 
     ExitButton = Button(DiagnoseWindow, text="Exit", width=10, height=1, background="sienna2",
                         font=Labelsfont, relief=GROOVE, command=DiagnoseWindow.destroy)
-    ExitButton.place(x=1580, y=707, width=70, height=40)
+    ExitButton.place(x=1550, y=707, width=70, height=37)
 
     EditButton = Button(DiagnoseWindow, text="Edit", width=20, height=1, background="light blue",
                         font=Labelsfont, relief=GROOVE, command=EditFile)
-    EditButton.place(x=1120, y=635, width=70, height=35)
+    EditButton.place(x=1120, y=635, width=70, height=37)
 
     SaveButton = Button(DiagnoseWindow, text="Save", width=20, height=1, background="light blue",
                         font=Labelsfont, relief=GROOVE, command=SaveFile)
-    SaveButton.place(x=1200, y=635, width=70, height=35)
+    SaveButton.place(x=1200, y=635, width=70, height=37)
     #############################################
 
     TextFileDisplay = Text(DiagnoseWindow, width=10, height=10, font=Labelsfont, state=DISABLED)
@@ -223,15 +233,12 @@ def DiagnosisWindow(topLevel):
                                       variable=AlkalinePhosphatase,
                                       background="dark salmon").grid(row=14, column=2, sticky=W)
 
-    dirname = filedialog.askdirectory(parent=DiagnoseWindow, initialdir="C:\\Users\Sman9\Desktop\TestsProject",
-                                      title='Please select Patients folder')
-    os.chdir(dirname)
-    FilePath = os.getcwd()
 
     def Diagnose():
+        nonlocal PatientsFolder
         DiagnosisFile = None
         try:
-            DiagnosisFile = open(FilePath + "\\" + PatientName.get() + ".txt", 'a')
+            DiagnosisFile = open(PatientsFolder + "\\" + PatientName.get() + ".txt", 'a')
         except:
             messagebox.showerror(title="Error", message="Failed to open the file\n")
         if DiagnosisFile:
@@ -248,7 +255,7 @@ def DiagnosisWindow(topLevel):
             iron = Iron.get()
             hdl = HDL.get()
             alkaline = AlkalinePhosphatase.get()
-        ################### Age 0-3  START ##################
+            ################### Age 0-3  START ##################
             if 0 <= Patient_age <= 3:
                 if wbc > 17500:
                     DiagnosisFile.write("High WBC(White blood cells):\n"
@@ -970,4 +977,5 @@ def DiagnosisWindow(topLevel):
             DiagnosisFile.close()
             messagebox.showinfo("Diagnose Done!", "Diagnose Done!\n File created!")
             OpenDiagnoseFile(PatientName.get())
+
     DiagnoseWindow.mainloop()
