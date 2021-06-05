@@ -35,7 +35,7 @@ def main():
                               command=lambda: PasswordTextBox.configure(show="")).grid(row=2, column=3)
     HidePassword = ttk.Button(MainWindow, text="Hide", width=5,
                               command=lambda: PasswordTextBox.configure(show="*")).grid(row=2, column=4)
-    ExitButton = Button(MainWindow, text="Exit", font=('Lato', 11), width=8, command=quit) \
+    ExitButton = Button(MainWindow, text="Exit", font=('Lato', 11), width=8, command=MainWindow.destroy) \
         .grid(row=5, column=2, padx=5, pady=5)
     LoginButton = Button(MainWindow, text="Login", font=('Lato', 11), width=8,
                          command=lambda: Login(UsernameEntry.get(), PasswordEntry.get(), IDEntry.get(), MainWindow))\
@@ -81,8 +81,8 @@ def Login(username, password, id, window):
             else:
                 if username in UserNames and password in Passwords and id in IDs:
                     messagebox.showinfo("Success!", "Login Successful!")
-                    window.destroy()
-                    Diagnosis.DiagnosisWindow()
+                    Diagnosis.DiagnosisWindow(window)
+
                 else:
                     messagebox.showerror("invalid login attempt", "username or password is incorrect!")
         else:

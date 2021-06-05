@@ -5,7 +5,8 @@ from tkinter.messagebox import askquestion
 import Main
 
 
-def DiagnosisWindow():
+def DiagnosisWindow(topLevel):
+    topLevel.destroy()
     DiagnoseWindow = Tk()
     DiagnoseWindow.title("Diagnosis window")
     DiagnoseWindow.geometry("1680x768")
@@ -23,8 +24,7 @@ def DiagnosisWindow():
         Main.main()
 
     def New():
-        DiagnoseWindow.destroy()
-        DiagnosisWindow()
+        DiagnosisWindow(DiagnoseWindow)
 
     ######## Menu Bar ##################
     MenuBar = Menu(DiagnoseWindow)
@@ -32,7 +32,7 @@ def DiagnosisWindow():
     FileMenu = Menu(MenuBar, tearoff=0)
     FileMenu.add_separator()
     FileMenu.add_command(label="New", command=New)
-    FileMenu.add_command(label="Exit", command=quit)
+    FileMenu.add_command(label="Exit", command=DiagnoseWindow.destroy)
     MenuBar.add_cascade(label="File", menu=FileMenu)
 
     LoginMenu = Menu(MenuBar, tearoff=0)
@@ -44,7 +44,6 @@ def DiagnosisWindow():
     DiagnoseWindow.config(menu=MenuBar)
 
     ############# Variables ####################
-    FilePath = os.getcwd() + "\Patients\\"
     PatientName = StringVar()
     PatientAge = IntVar()
     PatientGender = StringVar()
@@ -69,9 +68,9 @@ def DiagnosisWindow():
     def SaveFile():
         File = None
         try:
-            File = open(FilePath + PatientName.get() + ".txt", 'w')
+            File = open(PatientName.get() + ".txt", 'w')
         except:
-            print("Patient file doesn't exist")
+            messagebox.showerror(title="Error", message="Failed to open the file\n")
         if File:
             data = TextFileDisplay.get(1.0, END)
             File.write(data)
@@ -82,9 +81,9 @@ def DiagnosisWindow():
     def OpenDiagnoseFile(name):
         File = None
         try:
-            File = open(FilePath + name + ".txt")
+            File = open(name + ".txt")
         except:
-            print("Patient file doesn't exist")
+            messagebox.showerror(title="Error", message="Failed to open the file\n")
         if File:
             TextFileDisplay.insert(1.0, File.read())
             File.close()
@@ -94,7 +93,7 @@ def DiagnosisWindow():
         TextFileDisplay.configure(state=NORMAL)
         Smoker = Smoking()
         PatientName = name
-        DiagnosisFile = open(FilePath + PatientName + ".txt", 'w+')
+        DiagnosisFile = open(os.getcwd() + "\\" + PatientName + ".txt", 'w+')
         DiagnosisFile.write("Patient Name: " + PatientName + "\n")
         DiagnosisFile.write("Smoking : " + Smoker + "\n")
         DiagnosisFile.write("White Blood Cells : " + str(WBC.get()) + " units\n")
@@ -109,7 +108,6 @@ def DiagnosisWindow():
         DiagnosisFile.write("High Density Lipoprotein : " + str(HDL.get()) + " mg\n")
         DiagnosisFile.write("Alkline Phosphatase : " + str(AlkalinePhosphatase.get()) + " units\n")
         DiagnosisFile.close()
-
         Diagnose()
 
     ############## Buttons #####################
@@ -119,7 +117,7 @@ def DiagnosisWindow():
     ConfirmSelection.place(x=850, y=707, width=110, height=40)
 
     ExitButton = Button(DiagnoseWindow, text="Exit", width=10, height=1, background="sienna2",
-                        font=Labelsfont, relief=GROOVE, command=lambda: quit(0))
+                        font=Labelsfont, relief=GROOVE, command=DiagnoseWindow.destroy)
     ExitButton.place(x=1580, y=707, width=70, height=40)
 
     EditButton = Button(DiagnoseWindow, text="Edit", width=20, height=1, background="light blue",
@@ -225,156 +223,393 @@ def DiagnosisWindow():
                                       variable=AlkalinePhosphatase,
                                       background="dark salmon").grid(row=14, column=2, sticky=W)
 
+    dirname = filedialog.askdirectory(parent=DiagnoseWindow, initialdir="C:\\Users\Sman9\Desktop\TestsProject",
+                                      title='Please select Patients folder')
+    os.chdir(dirname)
+    FilePath = os.getcwd()
+
     def Diagnose():
-        DiagnosisFile = open(FilePath + "\\" + PatientName.get() + ".txt", 'a')
-        DiagnosisFile.write("\nDiagnosis:\n\n")
-        Patient_age = PatientAge.get()
-        wbc = WBC.get()
-        neut = Neut.get()
-        lymph = Lymph.get()
-        rbc = float(RBC.get())
-        hct = HCT.get()
-        urea = Urea.get()
-        hb = float(Hb.get())
-        chno = float(CHNO.get())
-        iron = Iron.get()
-        hdl = HDL.get()
-        alkaline = AlkalinePhosphatase.get()
+        DiagnosisFile = None
+        try:
+            DiagnosisFile = open(FilePath + "\\" + PatientName.get() + ".txt", 'a')
+        except:
+            messagebox.showerror(title="Error", message="Failed to open the file\n")
+        if DiagnosisFile:
+            DiagnosisFile.write("\nDiagnosis:\n\n")
+            Patient_age = PatientAge.get()
+            wbc = WBC.get()
+            neut = Neut.get()
+            lymph = Lymph.get()
+            rbc = float(RBC.get())
+            hct = HCT.get()
+            urea = Urea.get()
+            hb = float(Hb.get())
+            chno = float(CHNO.get())
+            iron = Iron.get()
+            hdl = HDL.get()
+            alkaline = AlkalinePhosphatase.get()
         ################### Age 0-3  START ##################
-        if 0 <= Patient_age <= 3:
-            if wbc > 17500:
-                DiagnosisFile.write("High WBC(White blood cells):\n"
-                                    "Usually indicated that there is an infection if there is a fever.\n"
-                                    "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer.\n "
-                                    "Recommended treatment:\n"
-                                    "for infection: Specific antibiotic.\n"
-                                    "for blood disease a combination of cyclophospamide and corticosurides.\n"
-                                    "for cancer: Entrectinib.\n\n")
-            elif wbc < 6000:
-                DiagnosisFile.write("Low WBC(White blood cells):\n"
-                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for viral disease: Rest at home.\n"
-                                    "for cancer: Entrectinib.\n\n")
-
-            if neut > 54:
-                DiagnosisFile.write("High Neut(Neutrophil):\n"
-                                    "Indicate usually on bacterial infection\n"
-                                    "Recommended treatment:\n"
-                                    "for bacterial infection: Specific antibiotic.\n")
-            elif neut < 28:
-                DiagnosisFile.write("Low Neut(Neutrophil):\n"
-                                    "Indicate a disturbance in blood production, tendency to infections from \n"
-                                    "bacteria and in rare cases - a cancerous process.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n"
-                                    "for infections: Specific antibiotic.\n"
-                                    "for cancer: Entrectinib\n\n")
-
-            if lymph > 52:
-                DiagnosisFile.write("High Lymph(Lymphocytes):\n"
-                                    "Indicates about a problem in creating blood cells.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n\n")
-            elif lymph < 36:
-                DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
-                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for bacterial infection: Specific antibiotic.\n"
-                                    "for lymphoma cancer: Entrectinib.\n\n")
-
-            if rbc > 6:
-                DiagnosisFile.write("High RBC(Red blood cells):\n"
-                                    "Could indicate on disturbance in the blood production system,\n"
-                                    "high levels were also observed in smokers and in lung disease patients.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n\n")
-            elif rbc < 4.5:
-                DiagnosisFile.write("Low RBC(Red blood cells):\n"
-                                    "Could indicate on anemia or heavy bleeding.\n"
-                                    "Recommended treatment:\n"
-                                    "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
-                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
-
-            if PatientGender == "Male":
-                if hct > 54:
-                    DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n"
+            if 0 <= Patient_age <= 3:
+                if wbc > 17500:
+                    DiagnosisFile.write("High WBC(White blood cells):\n"
+                                        "Usually indicated that there is an infection if there is a fever.\n"
+                                        "In other rare cases, very high WBC count may indicate about blood disease or "
+                                        "cancer.\n "
                                         "Recommended treatment:\n"
-                                        "for smokers: Stop smoking.")
-                elif hct < 37:
-                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "for infection: Specific antibiotic.\n"
+                                        "for blood disease a combination of cyclophospamide and corticosurides.\n"
+                                        "for cancer: Entrectinib.\n\n")
+                elif wbc < 6000:
+                    DiagnosisFile.write("Low WBC(White blood cells):\n"
+                                        "Indicate viral disease, failure of the immune system and in extremely rare "
+                                        "cases "
+                                        "- cancer.\n"
                                         "Recommended treatment:\n"
-                                        "for bleeding : Urgently evacuate to a hospital.\n"
-                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
-            elif PatientGender == "Female":
-                if hct > 47:
-                    DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n"
-                                        "Recommended treatment:\n"
-                                        "for smoking: Stop smoking.\n\n")
-                elif hct < 33:
-                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n"
-                                        "Recommended treatment:\n"
-                                        "for bleeding : Urgently evacuate to a hospital.\n"
-                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
+                                        "for viral disease: Rest at home.\n"
+                                        "for cancer: Entrectinib.\n\n")
 
-            if urea > 43:
-                DiagnosisFile.write("High Urea:\n"
-                                    "Could indicate on kidney disease, dehydration or\n"
-                                    "a high-protein diet.\n"
-                                    "Recommended treatment:\n"
-                                    "for kidney disease: balance sugar levels in blood.\n"
-                                    "for dehydration: Complete rest lying down and returning fluids by drinking\n"
-                                    "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
-            elif urea < 17:
-                DiagnosisFile.write("Low Urea:\n"
-                                    "Malnutrition , a low protein diet or liver disease.\n"
-                                    "It should be noted that in pregnancy the level of the infiltrator(Urea) "
-                                    "decreases.\n"
-                                    "Recommended treatment:\n"
-                                    "for Malnutrition: Arrange an appointment with a nutritionist.\n"
-                                    "for a low protein diet: Arrange an appointment with a nutritionist.\n"
-                                    "for a liver disease: Referral to a specific diagnosis for the purpose of "
-                                    "determining treatment.\n\n")
-
-            if hb < 11.5:
-                DiagnosisFile.write("Low Hb(Hemoglobin):\n"
-                                    "Indicative of anemia.\n"
-                                    "This could be due to hematological disorder from iron deficiency and bleeding.\n"
-                                    "Recommended treatment:\n"
-                                    "for hematological disorder: Injection of a hormone to encourage red blood cell "
-                                    "production.\n "
-                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
-
-            if 0 <= Patient_age <= 2:
-                if chno > 0.5:
-                    DiagnosisFile.write("High CHNO(Creatinine):\n"
-                                        "May indicate a kidney problem and in severe cases kidney failure.\n"
-                                        "High values can also be found during diarrhea and vomiting\n"
-                                        "(Causes of increased muscle breakdown and high values of creatinine),\n"
-                                        "muscle disease and increased consumption of meat.\n"
+                if neut > 54:
+                    DiagnosisFile.write("High Neut(Neutrophil):\n"
+                                        "Indicate usually on bacterial infection\n"
                                         "Recommended treatment:\n"
-                                        "for kidney problem: balance sugar levels in blood.\n"
-                                        "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
-                                        "for a month.\n"
-                                        "for increased consumption of meat: Arrange an appointment with a "
-                                        "nutritionist.\n\n")
-                if chno < 0.2:
-                    DiagnosisFile.write("Low CHNO(Creatinine):\n"
-                                        "Most often seen in patients with very poor muscle mass and malnourished\n"
-                                        "people who do not consume enough protein.\n"
+                                        "for bacterial infection: Specific antibiotic.\n")
+                elif neut < 28:
+                    DiagnosisFile.write("Low Neut(Neutrophil):\n"
+                                        "Indicate a disturbance in blood production, tendency to infections from \n"
+                                        "bacteria and in rare cases - a cancerous process.\n"
                                         "Recommended treatment:\n"
-                                        "for malnourished: Arrange an appointment with a nutritionist.\n"
-                                        "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
-            elif Patient_age > 2:
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n"
+                                        "for infections: Specific antibiotic.\n"
+                                        "for cancer: Entrectinib\n\n")
+
+                if lymph > 52:
+                    DiagnosisFile.write("High Lymph(Lymphocytes):\n"
+                                        "Indicates about a problem in creating blood cells.\n"
+                                        "Recommended treatment:\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n\n")
+                elif lymph < 36:
+                    DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
+                                        "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
+                                        "Recommended treatment:\n"
+                                        "for bacterial infection: Specific antibiotic.\n"
+                                        "for lymphoma cancer: Entrectinib.\n\n")
+
+                if rbc > 6:
+                    DiagnosisFile.write("High RBC(Red blood cells):\n"
+                                        "Could indicate on disturbance in the blood production system,\n"
+                                        "high levels were also observed in smokers and in lung disease patients.\n"
+                                        "Recommended treatment:\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n\n")
+                elif rbc < 4.5:
+                    DiagnosisFile.write("Low RBC(Red blood cells):\n"
+                                        "Could indicate on anemia or heavy bleeding.\n"
+                                        "Recommended treatment:\n"
+                                        "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
+                                        "for bleeding: Urgently evacuate to a hospital.\n\n")
+
+                if PatientGender == "Male":
+                    if hct > 54:
+                        DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                            "Usually found in smokers.\n"
+                                            "Recommended treatment:\n"
+                                            "for smokers: Stop smoking.")
+                    elif hct < 37:
+                        DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                            "Indicate mostly about bleeding or anemia.\n"
+                                            "Recommended treatment:\n"
+                                            "for bleeding : Urgently evacuate to a hospital.\n"
+                                            "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
+                elif PatientGender == "Female":
+                    if hct > 47:
+                        DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                            "Usually found in smokers.\n"
+                                            "Recommended treatment:\n"
+                                            "for smoking: Stop smoking.\n\n")
+                    elif hct < 33:
+                        DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                            "Indicate mostly about bleeding or anemia.\n"
+                                            "Recommended treatment:\n"
+                                            "for bleeding : Urgently evacuate to a hospital.\n"
+                                            "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
+
+                if urea > 43:
+                    DiagnosisFile.write("High Urea:\n"
+                                        "Could indicate on kidney disease, dehydration or\n"
+                                        "a high-protein diet.\n"
+                                        "Recommended treatment:\n"
+                                        "for kidney disease: balance sugar levels in blood.\n"
+                                        "for dehydration: Complete rest lying down and returning fluids by drinking\n"
+                                        "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
+                elif urea < 17:
+                    DiagnosisFile.write("Low Urea:\n"
+                                        "Malnutrition , a low protein diet or liver disease.\n"
+                                        "It should be noted that in pregnancy the level of the infiltrator(Urea) "
+                                        "decreases.\n"
+                                        "Recommended treatment:\n"
+                                        "for Malnutrition: Arrange an appointment with a nutritionist.\n"
+                                        "for a low protein diet: Arrange an appointment with a nutritionist.\n"
+                                        "for a liver disease: Referral to a specific diagnosis for the purpose of "
+                                        "determining treatment.\n\n")
+
+                if hb < 11.5:
+                    DiagnosisFile.write("Low Hb(Hemoglobin):\n"
+                                        "Indicative of anemia.\n"
+                                        "This could be due to hematological disorder from iron deficiency and "
+                                        "bleeding.\n "
+                                        "Recommended treatment:\n"
+                                        "for hematological disorder: Injection of a hormone to encourage red blood "
+                                        "cell "
+                                        "production.\n "
+                                        "for bleeding: Urgently evacuate to a hospital.\n\n")
+
+                if 0 <= Patient_age <= 2:
+                    if chno > 0.5:
+                        DiagnosisFile.write("High CHNO(Creatinine):\n"
+                                            "May indicate a kidney problem and in severe cases kidney failure.\n"
+                                            "High values can also be found during diarrhea and vomiting\n"
+                                            "(Causes of increased muscle breakdown and high values of creatinine),\n"
+                                            "muscle disease and increased consumption of meat.\n"
+                                            "Recommended treatment:\n"
+                                            "for kidney problem: balance sugar levels in blood.\n"
+                                            "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
+                                            "for a month.\n"
+                                            "for increased consumption of meat: Arrange an appointment with a "
+                                            "nutritionist.\n\n")
+                    if chno < 0.2:
+                        DiagnosisFile.write("Low CHNO(Creatinine):\n"
+                                            "Most often seen in patients with very poor muscle mass and malnourished\n"
+                                            "people who do not consume enough protein.\n"
+                                            "Recommended treatment:\n"
+                                            "for malnourished: Arrange an appointment with a nutritionist.\n"
+                                            "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
+                elif Patient_age > 2:
+                    if chno > 1:
+                        DiagnosisFile.write("High CHNO(Creatinine):\n"
+                                            "May indicate a kidney problem and in severe cases kidney failure.\n"
+                                            "High values can also be found during diarrhea and vomiting\n"
+                                            "(Causes of increased muscle breakdown and high values of creatinine),\n"
+                                            "muscle disease and increased consumption of meat.\n"
+                                            "Recommended treatment:\n"
+                                            "for kidney problem: balance sugar levels in blood.\n"
+                                            "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
+                                            "for a month.\n"
+                                            "for increased consumption of meat: Arrange an appointment with a "
+                                            "nutritionist.\n\n")
+                    if chno < 0.5:
+                        DiagnosisFile.write("Low CHNO(Creatinine):\n"
+                                            "Most often seen in patients with very poor muscle mass and malnourished\n"
+                                            "people who do not consume enough protein.\n"
+                                            "Recommended treatment:\n"
+                                            "for malnourished: Arrange an appointment with a nutritionist.\n"
+                                            "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
+
+                if PatientGender == "Male":
+                    if iron > 160:
+                        DiagnosisFile.write("High Iron:\n"
+                                            "Could indicate iron poisoning.\n"
+                                            "Recommended treatment:\n"
+                                            "for iron poisoning: Evacuate to a hospital.\n\n")
+                    elif iron < 60:
+                        DiagnosisFile.write("Low Iron:\n"
+                                            "Usually attests to an inadequate diet or an increase in iron requirement\n"
+                                            "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
+                                            "month.\n "
+                                            "for blood loss: Urgently evacuate to a hospital.\n\n")
+                if PatientGender == "Female":
+                    if iron > 160 * 0.8:
+                        DiagnosisFile.write("High Iron:\n"
+                                            "Could indicate iron poisoning.\n"
+                                            "Recommended treatment:\n"
+                                            "for iron poisoning: Evacuate to a hospital.\n\n")
+                    elif iron < 60 * 0.8:
+                        DiagnosisFile.write("Low Iron:\n"
+                                            "Usually attests to an inadequate diet or\nan increase in iron requirement"
+                                            "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
+                                            "month.\n "
+                                            "for blood loss: Urgently evacuate to a hospital.\n\n")
+
+                if PatientGender == "Male":
+                    if hdl > 62:
+                        DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
+                        #  Harmless, doesn't need treatment.
+                    elif hdl < 29:
+                        DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                            "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
+                                            "the "
+                                            "blood) or about adult diabetes.\n"
+                                            "Recommended treatment:\n"
+                                            "for heart disease: Arrange an appointment with a nutritionist.\n"
+                                            "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
+                                            "1 5mg pill of Simovil a day for a week.\n"
+                                            "for adult diabetes: Insulin adjustment for the patient.\n\n")
+                elif PatientGender == "Female":
+                    if hdl > 82:
+                        DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n")
+                        #  Harmless, doesn't need treatment.
+                    elif hdl < 34:
+                        DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                            "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
+                                            "the "
+                                            "blood) or about adult diabetes.\n"
+                                            "Recommended treatment:\n"
+                                            "for heart disease: Arrange an appointment with a nutritionist.\n"
+                                            "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
+                                            "1 5mg pill of Simovil a day for a week.\n"
+                                            "for adult diabetes: Insulin adjustment for the patient.\n\n")
+
+                if alkaline > 120:
+                    DiagnosisFile.write("High Alkaline Phosphatase:\n"
+                                        "Could indicate about liver disease, biliary diseases, pregnancy, "
+                                        "Hyperthyroidism "
+                                        "(Hyperactivity of thyroid gland) or use of various medications.\n"
+                                        "Recommended treatment:\n"
+                                        "for liver disease: Referral to a specific diagnosis for the purpose of "
+                                        "determining treatment.\n"
+                                        "for biliary diseases: Referral for surgical treatment.\n"
+                                        "for Hyperthyroidism: Propylthiouracil To decrease thyroid activity.\n"
+                                        "for use of various medications: Referral to the family doctor for a match "
+                                        "test "
+                                        "between the medications.\n\n")
+                if alkaline < 60:
+                    DiagnosisFile.write("Low Alkaline Phosphatase:\n"
+                                        "May indicate a poor diet that lacks proteins.\n"
+                                        "lack in vitamins like B12, C, B6 and folic acid.\n"
+                                        "Recommended treatment:\n"
+                                        "for poor diet: Arrange an appointment with a nutritionist.\n"
+                                        "for lack in vitamins: Referral for a blood test to identify the missing "
+                                        "vitamins.\n\n")
+
+                ################### Age 0-3  END ##################
+
+                ################### Age 4-17  START ##################
+
+            elif 4 <= PatientAge.get() <= 17:
+                if wbc > 15500:
+                    DiagnosisFile.write("High WBC(White blood cells):\n"
+                                        "Usually indicated that there is an infection if there is a fever.\n"
+                                        "In other rare cases, very high WBC count may indicate about blood disease or "
+                                        "cancer.\n"
+                                        "Recommended treatment:\n"
+                                        "for infection: Specific antibiotic.\n"
+                                        "for blood disease a combination of cyclophospamide and corticosurides.\n"
+                                        "for cancer: Entrectinib.\n\n")
+                elif wbc < 5500:
+                    DiagnosisFile.write("Low WBC(White blood cells):\n"
+                                        "Indicate viral disease, failure of the immune system and in extremely rare "
+                                        "cases "
+                                        "- cancer.\n"
+                                        "Recommended treatment:\n"
+                                        "for viral disease: Rest at home.\n"
+                                        "for cancer: Entrectinib.\n\n")
+
+                if neut > 54:
+                    DiagnosisFile.write("High Neut(Neutrophil):\n"
+                                        "Indicate viral disease, failure of the immune system and in extremely rare "
+                                        "cases "
+                                        "- cancer.\n"
+                                        "Recommended treatment:\n"
+                                        "for bacterial infection: Specific antibiotic.\n")
+                elif neut < 28:
+                    DiagnosisFile.write("Low Neut(Neutrophil):\n"
+                                        "Indicate a disturbance in blood formation of a tendency to infections from \n"
+                                        "bacteria and in rare cases - a cancerous process.\n"
+                                        "Recommended treatment:\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n"
+                                        "for infections: Specific antibiotic.\n"
+                                        "for cancer: Entrectinib\n\n")
+
+                if lymph > 52:
+                    DiagnosisFile.write("High Lymph(Lymphocytes):\n"
+                                        "Indicates about a problem in creating blood cells.\n"
+                                        "Recommended treatment:\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n")
+                elif lymph < 36:
+                    DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
+                                        "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
+                                        "Recommended treatment:\n"
+                                        "for bacterial infection: Specific antibiotic.\n"
+                                        "for lymphoma cancer: Entrectinib.\n\n")
+
+                if rbc > 6:
+                    DiagnosisFile.write("High RBC(Red blood cells):\n"
+                                        "Could indicate on disturbance in the blood production system,\n"
+                                        "high levels were also observed in smokers and in lung disease patients.\n"
+                                        "Recommended treatment:\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n")
+                elif rbc < 4.5:
+                    DiagnosisFile.write("Low RBC(Red blood cells):\n"
+                                        "Could indicate on anemia or heavy bleeding.\n"
+                                        "Recommended treatment:\n"
+                                        "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
+                                        "for bleeding: Urgently evacuate to a hospital.\n\n")
+
+                if PatientGender == "Male":
+                    if hct > 54:
+                        DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                            "Usually found in smokers.\n"
+                                            "Recommended treatment:\n"
+                                            "for smoking: Stop smoking.\n\n")
+                    elif hct < 37:
+                        DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                            "Indicate mostly about bleeding or anemia.\n"
+                                            "Recommended treatment:\n"
+                                            "for bleeding : Urgently evacuate to a hospital.\n"
+                                            "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
+                elif PatientGender == "Female":
+                    if hct > 47:
+                        DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                            "Usually found in smokers.\n"
+                                            "Recommended treatment:\n"
+                                            "for smoking: Stop smoking.\n\n")
+                    elif hct < 33:
+                        DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                            "Indicate mostly about bleeding or anemia.\n"
+                                            "Recommended treatment:\n"
+                                            "for bleeding : Urgently evacuate to a hospital.\n"
+                                            "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
+
+                if urea > 43:
+                    DiagnosisFile.write("High Urea:\n"
+                                        "Could indicate on kidney disease, dehydration or\n"
+                                        "a high-protein diet.\n"
+                                        "Recommended treatment:\n"
+                                        "for kidney disease: balance sugar levels in blood.\n"
+                                        "for dehydration: Complete rest lying down and returning fluids by drinking\n"
+                                        "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
+                elif urea < 17:
+                    DiagnosisFile.write("Low Urea:\n"
+                                        "Malnutrition , a low protein diet or liver disease.\n"
+                                        "It should be noted that in pregnancy the level of the infiltrator(Urea) "
+                                        "decreases.\n"
+                                        "Recommended treatment:\n"
+                                        "for Malnutrition: Arrange an appointment with a nutritionist.\n"
+                                        "for a low protein diet: Arrange an appointment with a nutritionist.\n"
+                                        "for a liver disease: Referral to a specific diagnosis for the purpose of "
+                                        "determining treatment.\n\n")
+
+                if hb < 11.5:
+                    DiagnosisFile.write("Low Hb(Hemoglobin):\n"
+                                        "Indicative of anemia.\n"
+                                        "This could be due to hematological disorder from iron deficiency and "
+                                        "bleeding.\n"
+                                        "Recommended treatment:\n"
+                                        "for hematological disorder: Injection of a hormone to encourage red blood "
+                                        "cell "
+                                        "production.\n "
+                                        "for bleeding: Urgently evacuate to a hospital.\n\n")
+
                 if chno > 1:
                     DiagnosisFile.write("High CHNO(Creatinine):\n"
                                         "May indicate a kidney problem and in severe cases kidney failure.\n"
@@ -395,546 +630,344 @@ def DiagnosisWindow():
                                         "for malnourished: Arrange an appointment with a nutritionist.\n"
                                         "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
 
-            if PatientGender == "Male":
-                if iron > 160:
-                    DiagnosisFile.write("High Iron:\n"
-                                        "Could indicate iron poisoning.\n"
+                if PatientGender == "Male":
+                    if iron > 160:
+                        DiagnosisFile.write("High Iron:\n"
+                                            "Could indicate iron poisoning.\n"
+                                            "Recommended treatment:\n"
+                                            "for iron poisoning: Evacuate to a hospital.\n\n")
+                    elif iron < 60:
+                        DiagnosisFile.write("Low Iron:\n"
+                                            "Usually attests to an inadequate diet or\nan increase in iron requirement"
+                                            "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
+                                            "month.\n "
+                                            "for blood loss: Urgently evacuate to a hospital.\n\n")
+                if PatientGender == "Female":
+                    if iron > 160 * 0.8:
+                        DiagnosisFile.write("High Iron:\n"
+                                            "Could indicate iron poisoning.\n"
+                                            "Recommended treatment:\n"
+                                            "for iron poisoning: Evacuate to a hospital.\n\n")
+                    elif iron < 60 * 0.8:
+                        DiagnosisFile.write("Low Iron:\n"
+                                            "Usually attests to an inadequate diet or\nan increase in iron requirement"
+                                            "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
+                                            "month.\n "
+                                            "for blood loss: Urgently evacuate to a hospital.\n\n")
+
+                if PatientGender == "Male":
+                    if hdl > 62:
+                        DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
+                        #  Harmless, doesn't need treatment.
+                    elif hdl < 29:
+                        DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                            "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
+                                            "the "
+                                            "blood) or about adult diabetes.\n"
+                                            "Recommended treatment:\n"
+                                            "for heart disease: Arrange an appointment with a nutritionist.\n"
+                                            "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
+                                            "1 5mg pill of Simovil a day for a week.\n"
+                                            "for adult diabetes: Insulin adjustment for the patient.\n\n")
+                elif PatientGender == "Female":
+                    if hdl > 82:
+                        DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
+                        #  Harmless, doesn't need treatment.
+                    elif hdl < 34:
+                        DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                            "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
+                                            "the "
+                                            "blood) or about adult diabetes.\n"
+                                            "Recommended treatment:\n"
+                                            "for heart disease: Arrange an appointment with a nutritionist.\n"
+                                            "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
+                                            "1 5mg pill of Simovil a day for a week.\n"
+                                            "for adult diabetes: Insulin adjustment for the patient.\n\n")
+
+                if alkaline > 120:
+                    DiagnosisFile.write("High Alkaline Phosphatase:\n"
+                                        "Could indicate about liver disease, biliary diseases, pregnancy, "
+                                        "Hyperthyroidism "
+                                        "(Hyperactivity of thyroid gland) or use of various medications.\n"
                                         "Recommended treatment:\n"
-                                        "for iron poisoning: Evacuate to a hospital.\n\n")
-                elif iron < 60:
-                    DiagnosisFile.write("Low Iron:\n"
-                                        "Usually attests to an inadequate diet or an increase in iron requirement\n"
-                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                        "for liver disease: Referral to a specific diagnosis for the purpose of "
+                                        "determining treatment.\n"
+                                        "for biliary diseases: Referral for surgical treatment.\n"
+                                        "for Hyperthyroidism: Propylthiouracil To decrease thyroid activity.\n"
+                                        "for use of various medications: Referral to the family doctor for a match "
+                                        "test "
+                                        "between the medications.\n\n")
+                if alkaline < 60:
+                    DiagnosisFile.write("Low Alkaline Phosphatase:\n"
+                                        "May indicate a poor diet that lacks proteins.\n"
+                                        "lack in vitamins like B12, C, B6 and folic acid.\n"
                                         "Recommended treatment:\n"
-                                        "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a month.\n"
-                                        "for blood loss: Urgently evacuate to a hospital.\n\n")
-            if PatientGender == "Female":
-                if iron > 160 * 0.8:
-                    DiagnosisFile.write("High Iron:\n"
-                                        "Could indicate iron poisoning.\n"
+                                        "for poor diet: Arrange an appointment with a nutritionist.\n"
+                                        "for lack in vitamins: Referral for a blood test to identify the missing "
+                                        "vitamins.\n\n")
+
+                    ################### Age 4-17  END ##################
+
+                    ################### Age 18+  START ##################
+
+            if PatientAge.get() >= 18:
+                if wbc > 11000:
+                    DiagnosisFile.write("High WBC(White blood cells):\n"
+                                        "Usually indicated that there is an infection if there is a fever.\n"
+                                        "In other rare cases, very high WBC count may indicate about blood disease or "
+                                        "cancer.\n"
                                         "Recommended treatment:\n"
-                                        "for iron poisoning: Evacuate to a hospital.\n\n")
-                elif iron < 60 * 0.8:
-                    DiagnosisFile.write("Low Iron:\n"
-                                        "Usually attests to an inadequate diet or\nan increase in iron requirement"
-                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                        "for infection: Specific antibiotic.\n"
+                                        "for blood disease a combination of cyclophospamide and corticosurides.\n"
+                                        "for cancer: Entrectinib.\n\n")
+                elif wbc < 4500:
+                    DiagnosisFile.write("Low WBC(White blood cells):\n"
+                                        "Indicate viral disease, failure of the immune system and in extremely rare "
+                                        "cases "
+                                        "- cancer.\n"
                                         "Recommended treatment:\n"
-                                        "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a month.\n"
-                                        "for blood loss: Urgently evacuate to a hospital.\n\n")
+                                        "for viral disease: Rest at home.\n"
+                                        "for cancer: Entrectinib.\n\n")
 
-            if PatientGender == "Male":
-                if hdl > 62:
-                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
-                    #  Harmless, doesn't need treatment.
-                elif hdl < 29:
-                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
-                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
-                                        "blood) or about adult diabetes.\n"
+                if neut > 54:
+                    DiagnosisFile.write("High Neut(Neutrophil):\n"
+                                        "Indicate viral disease, failure of the immune system and in extremely rare "
+                                        "cases "
+                                        "- cancer.\n"
                                         "Recommended treatment:\n"
-                                        "for heart disease: Arrange an appointment with a nutritionist.\n"
-                                        "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
-                                        "1 5mg pill of Simovil a day for a week.\n"
-                                        "for adult diabetes: Insulin adjustment for the patient.\n\n")
-            elif PatientGender == "Female":
-                if hdl > 82:
-                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n")
-                    #  Harmless, doesn't need treatment.
-                elif hdl < 34:
-                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
-                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
-                                        "blood) or about adult diabetes.\n"
+                                        "for bacterial infection: Specific antibiotic.\n\n")
+                elif neut < 28:
+                    DiagnosisFile.write("Low Neut(Neutrophil):\n"
+                                        "Indicate a disturbance in blood formation of a tendency to infections from \n"
+                                        "bacteria and in rare cases - a cancerous process.\n"
                                         "Recommended treatment:\n"
-                                        "for heart disease: Arrange an appointment with a nutritionist.\n"
-                                        "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
-                                        "1 5mg pill of Simovil a day for a week.\n"
-                                        "for adult diabetes: Insulin adjustment for the patient.\n\n")
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n"
+                                        "for infections: Specific antibiotic.\n"
+                                        "for cancer: Entrectinib\n\n")
 
-            if alkaline > 120:
-                DiagnosisFile.write("High Alkaline Phosphatase:\n"
-                                    "Could indicate about liver disease, biliary diseases, pregnancy, Hyperthyroidism"
-                                    "(Hyperactivity of thyroid gland) or use of various medications.\n"
-                                    "Recommended treatment:\n"
-                                    "for liver disease: Referral to a specific diagnosis for the purpose of "
-                                    "determining treatment.\n"
-                                    "for biliary diseases: Referral for surgical treatment.\n"
-                                    "for Hyperthyroidism: Propylthiouracil To decrease thyroid activity.\n"
-                                    "for use of various medications: Referral to the family doctor for a match test "
-                                    "between the medications.\n\n")
-            if alkaline < 60:
-                DiagnosisFile.write("Low Alkaline Phosphatase:\n"
-                                    "May indicate a poor diet that lacks proteins.\n"
-                                    "lack in vitamins like B12, C, B6 and folic acid.\n"
-                                    "Recommended treatment:\n"
-                                    "for poor diet: Arrange an appointment with a nutritionist.\n"
-                                    "for lack in vitamins: Referral for a blood test to identify the missing "
-                                    "vitamins.\n\n")
-
-            ################### Age 0-3  END ##################
-
-            ################### Age 4-17  START ##################
-
-        elif 4 <= PatientAge.get() <= 17:
-            if wbc > 15500:
-                DiagnosisFile.write("High WBC(White blood cells):\n"
-                                    "Usually indicated that there is an infection if there is a fever.\n"
-                                    "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for infection: Specific antibiotic.\n"
-                                    "for blood disease a combination of cyclophospamide and corticosurides.\n"
-                                    "for cancer: Entrectinib.\n\n")
-            elif wbc < 5500:
-                DiagnosisFile.write("Low WBC(White blood cells):\n"
-                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for viral disease: Rest at home.\n"
-                                    "for cancer: Entrectinib.\n\n")
-
-            if neut > 54:
-                DiagnosisFile.write("High Neut(Neutrophil):\n"
-                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for bacterial infection: Specific antibiotic.\n")
-            elif neut < 28:
-                DiagnosisFile.write("Low Neut(Neutrophil):\n"
-                                    "Indicate a disturbance in blood formation of a tendency to infections from \n"
-                                    "bacteria and in rare cases - a cancerous process.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n"
-                                    "for infections: Specific antibiotic.\n"
-                                    "for cancer: Entrectinib\n\n")
-
-            if lymph > 52:
-                DiagnosisFile.write("High Lymph(Lymphocytes):\n"
-                                    "Indicates about a problem in creating blood cells.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n")
-            elif lymph < 36:
-                DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
-                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for bacterial infection: Specific antibiotic.\n"
-                                    "for lymphoma cancer: Entrectinib.\n\n")
-
-            if rbc > 6:
-                DiagnosisFile.write("High RBC(Red blood cells):\n"
-                                    "Could indicate on disturbance in the blood production system,\n"
-                                    "high levels were also observed in smokers and in lung disease patients.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n")
-            elif rbc < 4.5:
-                DiagnosisFile.write("Low RBC(Red blood cells):\n"
-                                    "Could indicate on anemia or heavy bleeding.\n"
-                                    "Recommended treatment:\n"
-                                    "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
-                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
-
-            if PatientGender == "Male":
-                if hct > 54:
-                    DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n"
+                if lymph > 52:
+                    DiagnosisFile.write("High Lymph(Lymphocytes):\n"
+                                        "Indicates about a problem in creating blood cells.\n"
                                         "Recommended treatment:\n"
-                                        "for smoking: Stop smoking.\n\n")
-                elif hct < 37:
-                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n\n")
+                elif lymph < 36:
+                    DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
+                                        "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
                                         "Recommended treatment:\n"
-                                        "for bleeding : Urgently evacuate to a hospital.\n"
-                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
-            elif PatientGender == "Female":
-                if hct > 47:
-                    DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n"
+                                        "for bacterial infection: Specific antibiotic.\n"
+                                        "for lymphoma cancer: Entrectinib.\n\n")
+
+                if rbc > 6:
+                    DiagnosisFile.write("High RBC(Red blood cells):\n"
+                                        "Could indicate on disturbance in the blood production system,\n"
+                                        "high levels were also observed in smokers and in lung disease patients.\n"
                                         "Recommended treatment:\n"
-                                        "for smoking: Stop smoking.\n\n")
-                elif hct < 33:
-                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n"
+                                        "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
+                                        "1 5mg pill of Folic acid once a day for a month.\n")
+                elif rbc < 4.5:
+                    DiagnosisFile.write("Low RBC(Red blood cells):\n"
+                                        "Could indicate on anemia or heavy bleeding.\n"
                                         "Recommended treatment:\n"
-                                        "for bleeding : Urgently evacuate to a hospital.\n"
-                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
-
-            if urea > 43:
-                DiagnosisFile.write("High Urea:\n"
-                                    "Could indicate on kidney disease, dehydration or\n"
-                                    "a high-protein diet.\n"
-                                    "Recommended treatment:\n"
-                                    "for kidney disease: balance sugar levels in blood.\n"
-                                    "for dehydration: Complete rest lying down and returning fluids by drinking\n"
-                                    "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
-            elif urea < 17:
-                DiagnosisFile.write("Low Urea:\n"
-                                    "Malnutrition , a low protein diet or liver disease.\n"
-                                    "It should be noted that in pregnancy the level of the infiltrator(Urea) "
-                                    "decreases.\n"
-                                    "Recommended treatment:\n"
-                                    "for Malnutrition: Arrange an appointment with a nutritionist.\n"
-                                    "for a low protein diet: Arrange an appointment with a nutritionist.\n"
-                                    "for a liver disease: Referral to a specific diagnosis for the purpose of "
-                                    "determining treatment.\n\n")
-
-            if hb < 11.5:
-                DiagnosisFile.write("Low Hb(Hemoglobin):\n"
-                                    "Indicative of anemia.\n"
-                                    "This could be due to hematological disorder from iron deficiency and "
-                                    "bleeding.\n"
-                                    "Recommended treatment:\n"
-                                    "for hematological disorder: Injection of a hormone to encourage red blood cell "
-                                    "production.\n "
-                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
-
-            if chno > 1:
-                DiagnosisFile.write("High CHNO(Creatinine):\n"
-                                    "May indicate a kidney problem and in severe cases kidney failure.\n"
-                                    "High values can also be found during diarrhea and vomiting\n"
-                                    "(Causes of increased muscle breakdown and high values of creatinine),\n"
-                                    "muscle disease and increased consumption of meat.\n"
-                                    "Recommended treatment:\n"
-                                    "for kidney problem: balance sugar levels in blood.\n"
-                                    "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
-                                    "for a month.\n"
-                                    "for increased consumption of meat: Arrange an appointment with a "
-                                    "nutritionist.\n\n")
-            if chno < 0.5:
-                DiagnosisFile.write("Low CHNO(Creatinine):\n"
-                                    "Most often seen in patients with very poor muscle mass and malnourished\n"
-                                    "people who do not consume enough protein.\n"
-                                    "Recommended treatment:\n"
-                                    "for malnourished: Arrange an appointment with a nutritionist.\n"
-                                    "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
-
-            if PatientGender == "Male":
-                if iron > 160:
-                    DiagnosisFile.write("High Iron:\n"
-                                        "Could indicate iron poisoning.\n"
-                                        "Recommended treatment:\n"
-                                        "for iron poisoning: Evacuate to a hospital.\n\n")
-                elif iron < 60:
-                    DiagnosisFile.write("Low Iron:\n"
-                                        "Usually attests to an inadequate diet or\nan increase in iron requirement"
-                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n"
-                                        "Recommended treatment:\n"
-                                        "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a month.\n"
-                                        "for blood loss: Urgently evacuate to a hospital.\n\n")
-            if PatientGender == "Female":
-                if iron > 160 * 0.8:
-                    DiagnosisFile.write("High Iron:\n"
-                                        "Could indicate iron poisoning.\n"
-                                        "Recommended treatment:\n"
-                                        "for iron poisoning: Evacuate to a hospital.\n\n")
-                elif iron < 60 * 0.8:
-                    DiagnosisFile.write("Low Iron:\n"
-                                        "Usually attests to an inadequate diet or\nan increase in iron requirement"
-                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n"
-                                        "Recommended treatment:\n"
-                                        "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a month.\n"
-                                        "for blood loss: Urgently evacuate to a hospital.\n\n")
-
-            if PatientGender == "Male":
-                if hdl > 62:
-                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
-                    #  Harmless, doesn't need treatment.
-                elif hdl < 29:
-                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
-                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
-                                        "blood) or about adult diabetes.\n"
-                                        "Recommended treatment:\n"
-                                        "for heart disease: Arrange an appointment with a nutritionist.\n"
-                                        "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
-                                        "1 5mg pill of Simovil a day for a week.\n"
-                                        "for adult diabetes: Insulin adjustment for the patient.\n\n")
-            elif PatientGender == "Female":
-                if hdl > 82:
-                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
-                    #  Harmless, doesn't need treatment.
-                elif hdl < 34:
-                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
-                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
-                                        "blood) or about adult diabetes.\n"
-                                        "Recommended treatment:\n"
-                                        "for heart disease: Arrange an appointment with a nutritionist.\n"
-                                        "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
-                                        "1 5mg pill of Simovil a day for a week.\n"
-                                        "for adult diabetes: Insulin adjustment for the patient.\n\n")
-
-            if alkaline > 120:
-                DiagnosisFile.write("High Alkaline Phosphatase:\n"
-                                    "Could indicate about liver disease, biliary diseases, pregnancy, Hyperthyroidism"
-                                    "(Hyperactivity of thyroid gland) or use of various medications.\n"
-                                    "Recommended treatment:\n"
-                                    "for liver disease: Referral to a specific diagnosis for the purpose of "
-                                    "determining treatment.\n"
-                                    "for biliary diseases: Referral for surgical treatment.\n"
-                                    "for Hyperthyroidism: Propylthiouracil To decrease thyroid activity.\n"
-                                    "for use of various medications: Referral to the family doctor for a match test "
-                                    "between the medications.\n\n")
-            if alkaline < 60:
-                DiagnosisFile.write("Low Alkaline Phosphatase:\n"
-                                    "May indicate a poor diet that lacks proteins.\n"
-                                    "lack in vitamins like B12, C, B6 and folic acid.\n"
-                                    "Recommended treatment:\n"
-                                    "for poor diet: Arrange an appointment with a nutritionist.\n"
-                                    "for lack in vitamins: Referral for a blood test to identify the missing "
-                                    "vitamins.\n\n")
-
-                ################### Age 4-17  END ##################
-
-                ################### Age 18+  START ##################
-
-        if PatientAge.get() >= 18:
-            if wbc > 11000:
-                DiagnosisFile.write("High WBC(White blood cells):\n"
-                                    "Usually indicated that there is an infection if there is a fever.\n"
-                                    "In other rare cases, very high WBC count may indicate about blood disease or "
-                                    "cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for infection: Specific antibiotic.\n"
-                                    "for blood disease a combination of cyclophospamide and corticosurides.\n"
-                                    "for cancer: Entrectinib.\n\n")
-            elif wbc < 4500:
-                DiagnosisFile.write("Low WBC(White blood cells):\n"
-                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for viral disease: Rest at home.\n"
-                                    "for cancer: Entrectinib.\n\n")
-
-            if neut > 54:
-                DiagnosisFile.write("High Neut(Neutrophil):\n"
-                                    "Indicate viral disease, failure of the immune system and in extremely rare cases "
-                                    "- cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for bacterial infection: Specific antibiotic.\n\n")
-            elif neut < 28:
-                DiagnosisFile.write("Low Neut(Neutrophil):\n"
-                                    "Indicate a disturbance in blood formation of a tendency to infections from \n"
-                                    "bacteria and in rare cases - a cancerous process.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n"
-                                    "for infections: Specific antibiotic.\n"
-                                    "for cancer: Entrectinib\n\n")
-
-            if lymph > 52:
-                DiagnosisFile.write("High Lymph(Lymphocytes):\n"
-                                    "Indicates about a problem in creating blood cells.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n\n")
-            elif lymph < 36:
-                DiagnosisFile.write("Low Lymph(Lymphocytes):\n"
-                                    "May indicate on prolonged bacterial infection, or about lymphoma cancer.\n"
-                                    "Recommended treatment:\n"
-                                    "for bacterial infection: Specific antibiotic.\n"
-                                    "for lymphoma cancer: Entrectinib.\n\n")
-
-            if rbc > 6:
-                DiagnosisFile.write("High RBC(Red blood cells):\n"
-                                    "Could indicate on disturbance in the blood production system,\n"
-                                    "high levels were also observed in smokers and in lung disease patients.\n"
-                                    "Recommended treatment:\n"
-                                    "for blood production: 1 10mg pill of vitamin B12 once a day for a month and"
-                                    "1 5mg pill of Folic acid once a day for a month.\n")
-            elif rbc < 4.5:
-                DiagnosisFile.write("Low RBC(Red blood cells):\n"
-                                    "Could indicate on anemia or heavy bleeding.\n"
-                                    "Recommended treatment:\n"
-                                    "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
-                                    "for bleeding: Urgently evacuate to a hospital.\n\n")
-
-            if PatientGender == "Male":
-                if hct > 54:
-                    DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n"
-                                        "Recommended treatment:\n"
-                                        "for smoking: Stop smoking.\n\n")
-                elif hct < 37:
-                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n"
-                                        "Recommended treatment:\n"
-                                        "for bleeding : Urgently evacuate to a hospital.\n"
-                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
-            elif PatientGender == "Female":
-                if hct > 47:
-                    DiagnosisFile.write("High HCT(Hematocrit):\n"
-                                        "Usually found in smokers.\n"
-                                        "Recommended treatment:\n"
-                                        "for smoking: Stop smoking.\n\n")
-                elif hct < 33:
-                    DiagnosisFile.write("Low HCT(Hematocrit):\n"
-                                        "Indicate mostly about bleeding or anemia.\n"
-                                        "Recommended treatment:\n"
-                                        "for bleeding : Urgently evacuate to a hospital.\n"
-                                        "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
-
-            if urea > 43:
-                DiagnosisFile.write("High Urea:\n"
-                                    "Could indicate on kidney disease, dehydration or\n"
-                                    "a high-protein diet.\n"
-                                    "Recommended treatment:\n"
-                                    "for kidney disease: balance sugar levels in blood.\n"
-                                    "for dehydration: Complete rest lying down and returning fluids by drinking\n"
-                                    "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
-            elif urea < 17:
-                DiagnosisFile.write("Low Urea:\n"
-                                    "Malnutrition , a low protein diet or liver disease.\n"
-                                    "It should be noted that in pregnancy the level of the infiltrator(Urea) "
-                                    "decreases.\n"
-                                    "Recommended treatment:\n"
-                                    "for Malnutrition: Arrange an appointment with a nutritionist.\n"
-                                    "for a low protein diet: Arrange an appointment with a nutritionist.\n"
-                                    "for a liver disease: Referral to a specific diagnosis for the purpose of "
-                                    "determining treatment.\n\n")
-
-            if PatientGender == "Male":
-                if hb < 12:
-                    DiagnosisFile.write("Low Hb(Hemoglobin):\n"
-                                        "Indicative of anemia.\n"
-                                        "This could be due to hematological disorder from iron deficiency and "
-                                        "bleeding.\n"
-                                        "Recommended treatment:\n"
-                                        "for hematological disorder: Injection of a hormone to encourage red blood "
-                                        "cell production.\n "
+                                        "for anemia: 2 pills 10 mg each, of Vitamin B12 a day, for a month.\n"
                                         "for bleeding: Urgently evacuate to a hospital.\n\n")
-            elif PatientGender == "Female":
-                if hb < 12:
-                    DiagnosisFile.write("Low Hb(Hemoglobin):\n"
-                                        "Indicative of anemia.\n"
-                                        "This could be due to hematological disorder from iron deficiency and "
-                                        "bleeding.\n"
-                                        "Recommended treatment:\n"
-                                        "for hematological disorder: Injection of a hormone to encourage red blood "
-                                        "cell production.\n"
-                                        "for bleeding: Urgently evacuate to a hospital.\n\n")
-            if 18 <= PatientAge.get() <= 59:
-                if chno > 1:
-                    DiagnosisFile.write("High CHNO(Creatinine):\n"
-                                        "May indicate a kidney problem and in severe cases kidney failure.\n"
-                                        "High values can also be found during diarrhea and vomiting\n"
-                                        "(Causes of increased muscle breakdown and high values of "
-                                        "creatinine),\n "
-                                        "muscle disease and increased consumption of meat.\n"
-                                        "Recommended treatment:\n"
-                                        "for kidney problem: balance sugar levels in blood.\n"
-                                        "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
-                                        "for a month.\n"
-                                        "for increased consumption of meat: Arrange an appointment with a "
-                                        "nutritionist.\n\n")
-                if chno < 0.6:
-                    DiagnosisFile.write("Low CHNO(Creatinine):\n"
-                                        "Most often seen in patients with very poor muscle mass and "
-                                        "malnourished\n"
-                                        "people who do not consume enough protein.\n"
-                                        "Recommended treatment:\n"
-                                        "for malnourished: Arrange an appointment with a nutritionist.\n"
-                                        "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
-            elif PatientAge.get() >= 60:
-                if chno > 1.2:
-                    DiagnosisFile.write("High CHNO(Creatinine):\n"
-                                        "May indicate a kidney problem and in severe cases kidney failure.\n"
-                                        "High values can also be found during diarrhea and vomiting\n"
-                                        "(Causes of increased muscle breakdown and high values of creatinine),\n"
-                                        "muscle disease and increased consumption of meat.\n"
-                                        "Recommended treatment:\n"
-                                        "for kidney problem: balance sugar levels in blood.\n"
-                                        "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
-                                        "for a month.\n"
-                                        "for increased consumption of meat: Arrange an appointment with a "
-                                        "nutritionist.\n\n")
-                if chno < 0.6:
-                    DiagnosisFile.write("Low CHNO(Creatinine):\n"
-                                        "Most often seen in patients with very poor muscle mass and malnourished\n"
-                                        "people who do not consume enough protein.\n"
-                                        "Recommended treatment:\n"
-                                        "for malnourished: Arrange an appointment with a nutritionist.\n"
-                                        "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
 
-            if PatientGender == "Male":
-                if iron > 160:
-                    DiagnosisFile.write("High Iron:\n"
-                                        "Could indicate iron poisoning.\n"
-                                        "Recommended treatment:\n"
-                                        "for iron poisoning: Evacuate to a hospital.\n\n")
-                elif iron < 60:
-                    DiagnosisFile.write("Low Iron:\n"
-                                        "Usually attests to an inadequate diet or an increase in iron requirement"
-                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n"
-                                        "Recommended treatment:\n"
-                                        "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a month.\n"
-                                        "for blood loss: Urgently evacuate to a hospital.\n\n")
-            if PatientGender == "Female":
-                if iron > 160 * 0.8:
-                    DiagnosisFile.write("High Iron:\n"
-                                        "Could indicate iron poisoning.\n"
-                                        "Recommended treatment:\n"
-                                        "for iron poisoning: Evacuate to a hospital.\n\n")
-                elif iron < 60 * 0.8:
-                    DiagnosisFile.write("Low Iron:\n"
-                                        "Usually attests to an inadequate diet or an increase in iron requirement"
-                                        "(For example, at pregnancy) or about blood loss due to bleeding.\n"
-                                        "Recommended treatment:\n"
-                                        "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a month.\n"
-                                        "for blood loss: Urgently evacuate to a hospital.\n\n")
+                if PatientGender == "Male":
+                    if hct > 54:
+                        DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                            "Usually found in smokers.\n"
+                                            "Recommended treatment:\n"
+                                            "for smoking: Stop smoking.\n\n")
+                    elif hct < 37:
+                        DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                            "Indicate mostly about bleeding or anemia.\n"
+                                            "Recommended treatment:\n"
+                                            "for bleeding : Urgently evacuate to a hospital.\n"
+                                            "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
+                elif PatientGender == "Female":
+                    if hct > 47:
+                        DiagnosisFile.write("High HCT(Hematocrit):\n"
+                                            "Usually found in smokers.\n"
+                                            "Recommended treatment:\n"
+                                            "for smoking: Stop smoking.\n\n")
+                    elif hct < 33:
+                        DiagnosisFile.write("Low HCT(Hematocrit):\n"
+                                            "Indicate mostly about bleeding or anemia.\n"
+                                            "Recommended treatment:\n"
+                                            "for bleeding : Urgently evacuate to a hospital.\n"
+                                            "for anemia: 2 pills 10 mg each of Vitamin B12 a day, for a month.\n\n")
 
-            if PatientGender == "Male":
-                if hdl > 62:
-                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
-                elif hdl < 29:
-                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
-                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
-                                        "blood) or about adult diabetes.\n"
+                if urea > 43:
+                    DiagnosisFile.write("High Urea:\n"
+                                        "Could indicate on kidney disease, dehydration or\n"
+                                        "a high-protein diet.\n"
                                         "Recommended treatment:\n"
-                                        "for heart disease: Arrange an appointment with a nutritionist.\n"
-                                        "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
-                                        "1 5mg pill of Simovil a day for a week.\n"
-                                        "for adult diabetes: Insulin adjustment for the patient.\n\n")
-            elif PatientGender == "Female":
-                if hdl > 82:
-                    DiagnosisFile.write("High HDL(High density lipoprotein):\n"
-                                        "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
-                    #  Harmless, doesn't need treatment.
-                elif hdl < 34:
-                    DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
-                                        "May indicate risk of heart disease, about hyperlipidemia(Hypertension in the "
-                                        "blood) or about adult diabetes.\n"
+                                        "for kidney disease: balance sugar levels in blood.\n"
+                                        "for dehydration: Complete rest lying down and returning fluids by drinking\n"
+                                        "for a high-protein diet: Arrange an appointment with a nutritionist.\n\n")
+                elif urea < 17:
+                    DiagnosisFile.write("Low Urea:\n"
+                                        "Malnutrition , a low protein diet or liver disease.\n"
+                                        "It should be noted that in pregnancy the level of the infiltrator(Urea) "
+                                        "decreases.\n"
                                         "Recommended treatment:\n"
-                                        "for heart disease: Arrange an appointment with a nutritionist.\n"
-                                        "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
-                                        "1 5mg pill of Simovil a day for a week.\n"
-                                        "for adult diabetes: Insulin adjustment for the patient.\n\n")
+                                        "for Malnutrition: Arrange an appointment with a nutritionist.\n"
+                                        "for a low protein diet: Arrange an appointment with a nutritionist.\n"
+                                        "for a liver disease: Referral to a specific diagnosis for the purpose of "
+                                        "determining treatment.\n\n")
 
-            if alkaline > 120:
-                DiagnosisFile.write("High Alkaline Phosphatase:\n"
-                                    "Could indicate about liver disease, biliary diseases, pregnancy, Hyperthyroidism"
-                                    "(Hyperactivity of thyroid gland) or use of various medications.\n"
-                                    "Recommended treatment:\n"
-                                    "for liver disease: Referral to a specific diagnosis for the purpose of "
-                                    "determining treatment.\n"
-                                    "for biliary diseases: Referral for surgical treatment.\n"
-                                    "for Hyperthyroidism: Propylthiouracil To decrease thyroid activity.\n"
-                                    "for use of various medications: Referral to the family doctor for a match test "
-                                    "between the medications.\n\n")
-            if alkaline < 60:
-                DiagnosisFile.write("Low Alkaline Phosphatase:\n"
-                                    "May indicate a poor diet that lacks proteins.\n"
-                                    "lack in vitamins like B12, C, B6 and folic acid.\n"
-                                    "Recommended treatment:\n"
-                                    "for poor diet: Arrange an appointment with a nutritionist.\n"
-                                    "for lack in vitamins: Referral for a blood test to identify the missing "
-                                    "vitamins.\n\n")
+                if PatientGender == "Male":
+                    if hb < 12:
+                        DiagnosisFile.write("Low Hb(Hemoglobin):\n"
+                                            "Indicative of anemia.\n"
+                                            "This could be due to hematological disorder from iron deficiency and "
+                                            "bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for hematological disorder: Injection of a hormone to encourage red blood "
+                                            "cell production.\n "
+                                            "for bleeding: Urgently evacuate to a hospital.\n\n")
+                elif PatientGender == "Female":
+                    if hb < 12:
+                        DiagnosisFile.write("Low Hb(Hemoglobin):\n"
+                                            "Indicative of anemia.\n"
+                                            "This could be due to hematological disorder from iron deficiency and "
+                                            "bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for hematological disorder: Injection of a hormone to encourage red blood "
+                                            "cell production.\n"
+                                            "for bleeding: Urgently evacuate to a hospital.\n\n")
+                if 18 <= PatientAge.get() <= 59:
+                    if chno > 1:
+                        DiagnosisFile.write("High CHNO(Creatinine):\n"
+                                            "May indicate a kidney problem and in severe cases kidney failure.\n"
+                                            "High values can also be found during diarrhea and vomiting\n"
+                                            "(Causes of increased muscle breakdown and high values of "
+                                            "creatinine),\n "
+                                            "muscle disease and increased consumption of meat.\n"
+                                            "Recommended treatment:\n"
+                                            "for kidney problem: balance sugar levels in blood.\n"
+                                            "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
+                                            "for a month.\n"
+                                            "for increased consumption of meat: Arrange an appointment with a "
+                                            "nutritionist.\n\n")
+                    if chno < 0.6:
+                        DiagnosisFile.write("Low CHNO(Creatinine):\n"
+                                            "Most often seen in patients with very poor muscle mass and "
+                                            "malnourished\n"
+                                            "people who do not consume enough protein.\n"
+                                            "Recommended treatment:\n"
+                                            "for malnourished: Arrange an appointment with a nutritionist.\n"
+                                            "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
+                elif PatientAge.get() >= 60:
+                    if chno > 1.2:
+                        DiagnosisFile.write("High CHNO(Creatinine):\n"
+                                            "May indicate a kidney problem and in severe cases kidney failure.\n"
+                                            "High values can also be found during diarrhea and vomiting\n"
+                                            "(Causes of increased muscle breakdown and high values of creatinine),\n"
+                                            "muscle disease and increased consumption of meat.\n"
+                                            "Recommended treatment:\n"
+                                            "for kidney problem: balance sugar levels in blood.\n"
+                                            "for muscle disease: 2 pills of 5mg each of Altman's Turmeric c3 a day, "
+                                            "for a month.\n"
+                                            "for increased consumption of meat: Arrange an appointment with a "
+                                            "nutritionist.\n\n")
+                    if chno < 0.6:
+                        DiagnosisFile.write("Low CHNO(Creatinine):\n"
+                                            "Most often seen in patients with very poor muscle mass and malnourished\n"
+                                            "people who do not consume enough protein.\n"
+                                            "Recommended treatment:\n"
+                                            "for malnourished: Arrange an appointment with a nutritionist.\n"
+                                            "for not enough protein: Arrange an appointment with a nutritionist.\n\n")
 
-        DiagnosisFile.close()
-        messagebox.showinfo("Diagnose Done!", "Diagnose Done!\n File created!")
-        OpenDiagnoseFile(PatientName.get())
+                if PatientGender == "Male":
+                    if iron > 160:
+                        DiagnosisFile.write("High Iron:\n"
+                                            "Could indicate iron poisoning.\n"
+                                            "Recommended treatment:\n"
+                                            "for iron poisoning: Evacuate to a hospital.\n\n")
+                    elif iron < 60:
+                        DiagnosisFile.write("Low Iron:\n"
+                                            "Usually attests to an inadequate diet or an increase in iron requirement"
+                                            "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
+                                            "month.\n "
+                                            "for blood loss: Urgently evacuate to a hospital.\n\n")
+                if PatientGender == "Female":
+                    if iron > 160 * 0.8:
+                        DiagnosisFile.write("High Iron:\n"
+                                            "Could indicate iron poisoning.\n"
+                                            "Recommended treatment:\n"
+                                            "for iron poisoning: Evacuate to a hospital.\n\n")
+                    elif iron < 60 * 0.8:
+                        DiagnosisFile.write("Low Iron:\n"
+                                            "Usually attests to an inadequate diet or an increase in iron requirement"
+                                            "(For example, at pregnancy) or about blood loss due to bleeding.\n"
+                                            "Recommended treatment:\n"
+                                            "for increase in iron requirement: 2 10mg pills of Vitamin B12 for a "
+                                            "month.\n "
+                                            "for blood loss: Urgently evacuate to a hospital.\n\n")
 
+                if PatientGender == "Male":
+                    if hdl > 62:
+                        DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
+                    elif hdl < 29:
+                        DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                            "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
+                                            "the "
+                                            "blood) or about adult diabetes.\n"
+                                            "Recommended treatment:\n"
+                                            "for heart disease: Arrange an appointment with a nutritionist.\n"
+                                            "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
+                                            "1 5mg pill of Simovil a day for a week.\n"
+                                            "for adult diabetes: Insulin adjustment for the patient.\n\n")
+                elif PatientGender == "Female":
+                    if hdl > 82:
+                        DiagnosisFile.write("High HDL(High density lipoprotein):\n"
+                                            "Usually harmless. Physical activity raises ""good"" cholesterol levels.\n\n")
+                        #  Harmless, doesn't need treatment.
+                    elif hdl < 34:
+                        DiagnosisFile.write("Low HDL(High density lipoprotein):\n"
+                                            "May indicate risk of heart disease, about hyperlipidemia(Hypertension in "
+                                            "the "
+                                            "blood) or about adult diabetes.\n"
+                                            "Recommended treatment:\n"
+                                            "for heart disease: Arrange an appointment with a nutritionist.\n"
+                                            "for hyperlipidemia: Arrange an appointment with a nutritionist,\n"
+                                            "1 5mg pill of Simovil a day for a week.\n"
+                                            "for adult diabetes: Insulin adjustment for the patient.\n\n")
+
+                if alkaline > 120:
+                    DiagnosisFile.write("High Alkaline Phosphatase:\n"
+                                        "Could indicate about liver disease, biliary diseases, pregnancy, "
+                                        "Hyperthyroidism "
+                                        "(Hyperactivity of thyroid gland) or use of various medications.\n"
+                                        "Recommended treatment:\n"
+                                        "for liver disease: Referral to a specific diagnosis for the purpose of "
+                                        "determining treatment.\n"
+                                        "for biliary diseases: Referral for surgical treatment.\n"
+                                        "for Hyperthyroidism: Propylthiouracil To decrease thyroid activity.\n"
+                                        "for use of various medications: Referral to the family doctor for a match "
+                                        "test "
+                                        "between the medications.\n\n")
+                if alkaline < 60:
+                    DiagnosisFile.write("Low Alkaline Phosphatase:\n"
+                                        "May indicate a poor diet that lacks proteins.\n"
+                                        "lack in vitamins like B12, C, B6 and folic acid.\n"
+                                        "Recommended treatment:\n"
+                                        "for poor diet: Arrange an appointment with a nutritionist.\n"
+                                        "for lack in vitamins: Referral for a blood test to identify the missing "
+                                        "vitamins.\n\n")
+
+            DiagnosisFile.close()
+            messagebox.showinfo("Diagnose Done!", "Diagnose Done!\n File created!")
+            OpenDiagnoseFile(PatientName.get())
     DiagnoseWindow.mainloop()

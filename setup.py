@@ -4,7 +4,7 @@ from cx_Freeze import setup, Executable
 
 includefiles = ['Doctor.xlsx']
 includes = []
-excludes = ["Diagnosis"]
+excludes = []
 packages = ['tkinter', 'openpyxl']
 build_exe_options = {'includes': includes, 'packages': packages, 'excludes': excludes, 'include_files': includefiles}
 
@@ -17,11 +17,14 @@ elif sys.platform == 'win32':
 exe = Executable(
     script="Main.py",
     target_name="AutoDoctor",
-    base=base)
+    base=base,
+    icon='RobotDoctor.ico'
+    )
 
 setup(
     name="AutoDoctor",
     version="1.0",
     description="Program to diagnose blood results and generate a matching treatment.",
     options={'build_exe': build_exe_options},
-    executables=[exe],)
+    executables=[exe]
+    )
