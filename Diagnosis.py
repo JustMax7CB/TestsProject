@@ -97,7 +97,6 @@ def DiagnosisWindow(topLevel):
     def GenerateTextFile(name):
         nonlocal PatientsFolder
         if not os.path.isdir(os.getcwd() + "\\build\Patients\\"):
-            messagebox.showinfo(title="test", message=os.getcwd() + "\\build\Patients\\")
             os.makedirs(os.getcwd() + "\\build\Patients\\")
         PatientsFolder = os.getcwd() + "\\build\Patients\\"
         TextFileDisplay.configure(state=DISABLED)
