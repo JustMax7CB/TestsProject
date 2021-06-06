@@ -7,7 +7,6 @@ import Diagnosis
 
 
 def main():
-    os.chdir("C:\\Users\Sman9\Desktop\TestsProject")
     MainWindow = Tk()
     MainWindow.title("Diagnosis App")
     MainWindow.geometry("400x150")
