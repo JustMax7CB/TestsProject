@@ -2,7 +2,7 @@
 
 Recieved an assignment in a course "Quality testing in software engineering" to develop an app to analyze patient's blood test to generate a recommended treatment.
 
-• Doctor.xlsx represents as the database of the doctors who can access the app.\n
+• Doctor.xlsx represents as the database of the doctors who can access the app.
 • Database.py consists openPyXl library to connect between the Excel enviroment to Python and save the Excel File/Sheet/Cell as a variable to use in the app.
 • Main.py as the main file of the app, opens a log-in window to access the main purpose of the app.
 • Diagnosis.py is the file that handles all the analyzing the blood results and generating a recommended treatment, 
