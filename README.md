@@ -15,7 +15,7 @@ also generating a text file for each patient once analyzed and reading the file 
 
 
 In order to create an executable file you'll need:
-- A python enviroment installed 
+- A python 3.9 enviroment installed 
 
 1. Install cx_Freeze using pip:
    
