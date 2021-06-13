@@ -24,7 +24,7 @@ In order to create an executable file you'll need:
    [Capture](https://user-images.githubusercontent.com/83203304/121799726-5584d100-cc36-11eb-944e-1608bd0c142b.JPG)
    • open cmd by CTRL + R and typing 'cmd' and pressing enter
      in the cmd console type cd 'directoryofthefolder'
-4. type in the cmd console 'python setup.py build' or 'python3 setup.py build
+4. type in the cmd console 'python setup.py build' or 'python3 setup.py build'
 5. a folder named 'build' will be created in the currently active folder and inside the 'build' folder there will be a folder named 'exe.win-amd64-3.9'
 6. inside 'exe.win-amd64-3.9' folder there will be a executable file named 'AutoDoctor'.
 7. In order to start the program just double click on 'AutoDoctor'
