@@ -20,6 +20,7 @@ In order to create an executable file you'll need:
 1. Install cx_Freeze using pip:
    
    1.1. open cmd by CTRL + R and typing 'cmd' and pressing enter
+   
    1.2. type 'pip install cx_freeze' and press enter
 
 2. download/pull the files from the "New" branch in a folder
