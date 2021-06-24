@@ -30,7 +30,7 @@ In order to create an executable file you'll need:
    • open the folder which you downloaded the files in and type 'cmd' in the path explorer
    [Capture](https://user-images.githubusercontent.com/83203304/121799726-5584d100-cc36-11eb-944e-1608bd0c142b.JPG)
    
-   • open cmd by CTRL + R and typing 'cmd' and pressing enter
+   • open cmd by Windows + R and typing 'cmd' and pressing enter
      in the cmd console type cd 'directoryofthefolder'
 
 4. type in the cmd console 'python setup.py build' or 'python3 setup.py build'
